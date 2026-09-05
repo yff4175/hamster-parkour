@@ -1033,9 +1033,19 @@ $("btn-restore").addEventListener("click",restoreDefault);
 $("btn-restore2").addEventListener("click",restoreDefault);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("import-modal").hidden) closeModal(); });
 
-/* ================= 管理员鉴权 ================= */
+/* ================= 管理员鉴权（密码哈希校验） ================= */
 const PW_KEY="hamster_admin_pw", AUTH_KEY="hamster_admin_auth";
-function getAdminPw(){ return localStorage.getItem(PW_KEY)||"admin2026"; }
+const DEFAULT_PW_HASH="c5c0bf4931879d9596a04134b23b66b4e3e5fd783160db8f70c271b91d36612a";
+function sha256Hex(str){
+  return crypto.subtle.digest("SHA-256", new TextEncoder().encode(str))
+    .then(buf=>[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join(""));
+}
+async function getStoredPwHash(){
+  const v=localStorage.getItem(PW_KEY);
+  if(!v) return DEFAULT_PW_HASH;
+  return /^[0-9a-f]{64}$/.test(v) ? v : sha256Hex(v); /* 兼容旧版明文存储 */
+}
+async function verifyPw(input){ return await sha256Hex(input)===await getStoredPwHash(); }
 function isAuthed(){ return localStorage.getItem(AUTH_KEY)==="1"; }
 function setLock(locked){
   $("lock-screen").hidden=!locked;
@@ -1067,19 +1077,19 @@ $("admin-btn").addEventListener("click",()=>{
 });
 $("lock-close").addEventListener("click",()=>{ setLock(false); });
 $("lock-screen").addEventListener("click",e=>{ if(e.target===$("lock-screen")) setLock(false); });
-$("lock-btn").addEventListener("click",()=>{
-  if($("lock-pw").value===getAdminPw()) unlockSite();
+$("lock-btn").addEventListener("click",async ()=>{
+  if(await verifyPw($("lock-pw").value)) unlockSite();
   else $("lock-err").textContent="密码错误，请重试";
 });
 $("lock-pw").addEventListener("keydown",e=>{ if(e.key==="Enter") $("lock-btn").click(); });
 $("logout-btn").addEventListener("click",lockSite);
 /* 修改密码 */
 $("btn-open-set").addEventListener("click",()=>{ $("set-box").hidden=!$("set-box").hidden; $("set-msg").textContent=""; $("set-msg").className="set-msg"; });
-$("btn-save-pw").addEventListener("click",()=>{
+$("btn-save-pw").addEventListener("click",async ()=>{
   const oldPw=$("set-old").value, nw=$("set-new").value, msg=$("set-msg");
-  if(oldPw!==getAdminPw()){ msg.textContent="当前密码不正确"; msg.className="set-msg err"; return; }
+  if(!(await verifyPw(oldPw))){ msg.textContent="当前密码不正确"; msg.className="set-msg err"; return; }
   if(nw.length<4){ msg.textContent="新密码至少 4 位"; msg.className="set-msg err"; return; }
-  localStorage.setItem(PW_KEY,nw);
+  localStorage.setItem(PW_KEY, await sha256Hex(nw));
   $("set-old").value=""; $("set-new").value="";
   msg.textContent="密码已更新"; msg.className="set-msg";
   showToast("管理员密码已更新");
