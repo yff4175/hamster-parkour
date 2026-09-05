@@ -417,7 +417,6 @@ footer{
 }
 .lock-input-row button:hover{filter:brightness(1.08)}
 .lock-err{color:#F28B8B;font-size:12.5px;margin-top:10px;min-height:16px}
-.lock-hint{font-size:11px;color:var(--faint);margin-top:14px;line-height:1.6}
 
 /* ---------- 响应式 ---------- */
 @media (max-width:760px){
@@ -458,7 +457,6 @@ footer{
       <button id="lock-btn">登录</button>
     </div>
     <div class="lock-err" id="lock-err"></div>
-    <div class="lock-hint" id="lock-hint"></div>
   </div>
 </div>
 
@@ -1039,11 +1037,6 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("import-modal
 const PW_KEY="hamster_admin_pw", AUTH_KEY="hamster_admin_auth";
 function getAdminPw(){ return localStorage.getItem(PW_KEY)||"admin2026"; }
 function isAuthed(){ return localStorage.getItem(AUTH_KEY)==="1"; }
-function refreshLockHint(){
-  $("lock-hint").textContent = localStorage.getItem(PW_KEY)
-    ? "管理员密码已自定义，请使用当前密码登录"
-    : "默认密码 admin2026，登录后可在「导入数据」面板中修改";
-}
 function setLock(locked){
   $("lock-screen").hidden=!locked;
 }
@@ -1065,13 +1058,11 @@ function unlockSite(){
 function lockSite(){
   localStorage.removeItem(AUTH_KEY);
   updateAdminUI(false);
-  refreshLockHint();
 }
 $("admin-btn").addEventListener("click",()=>{
   $("lock-err").textContent="";
   $("lock-pw").value="";
   setLock(true);
-  refreshLockHint();
   $("lock-pw").focus();
 });
 $("lock-close").addEventListener("click",()=>{ setLock(false); });
@@ -1095,7 +1086,6 @@ $("btn-save-pw").addEventListener("click",()=>{
 });
 
 /* ================= 启动 ================= */
-refreshLockHint();
 updateAdminUI(isAuthed());
 initSite();
 </script>
