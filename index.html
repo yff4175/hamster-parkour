@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仓跑巴士 · 仓鼠跑酷地图</title>
+<meta name="description" content="《守望先锋》破坏球（仓鼠）自定义房间跑酷地图社区合集：209 张地图代码、难度体系、技巧标签与教学视频，一键复制进游戏即玩。">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Chakra+Petch:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#0A1322;
+  --bg-2:#0C1729;
+  --panel:#111E35;
+  --panel-2:#16263F;
+  --panel-3:#1B2E4B;
+  --line:#243A5C;
+  --line-soft:#1C2F4D;
+  --text:#EAF0FA;
+  --muted:#94A7C6;
+  --faint:#6C80A3;
+  --egg:#F6C21B;          /* 蛋黄色主强调 */
+  --egg-deep:#D9A90F;
+  --egg-soft:rgba(246,194,27,.13);
+  --egg-line:rgba(246,194,27,.4);
+  --ok:#5AC47A;
+  --radius:14px;
+  --shadow:0 12px 34px rgba(0,0,0,.4);
+  --font-d:"Chakra Petch","Noto Sans SC",system-ui,sans-serif;
+  --font-b:"Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --font-m:ui-monospace,"SFMono-Regular","JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-b);
+  background:
+    radial-gradient(1100px 520px at 78% -10%, rgba(246,194,27,.10), transparent 60%),
+    radial-gradient(900px 480px at 8% -5%, rgba(50,90,170,.18), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  line-height:1.55;
+  min-height:100vh;
+}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:var(--egg);color:#161005}
+
+/* ---------- 背景网格 ---------- */
+.bg-grid{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size:52px 52px;
+  mask-image:radial-gradient(80% 60% at 50% 0%, #000 30%, transparent 78%);
+  opacity:.4;
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+  background:rgba(10,19,34,.82);
+  border-bottom:1px solid var(--line-soft);
+}
+.topbar-inner{
+  max-width:1240px;margin:0 auto;padding:12px 22px;
+  display:flex;align-items:center;gap:14px;
+}
+.logo{
+  width:38px;height:38px;flex:none;
+  display:grid;place-items:center;
+  border:1.5px solid var(--egg);
+  border-radius:11px;transform:rotate(45deg);
+}
+.logo svg{transform:rotate(-45deg);display:block}
+.brand-name{
+  font-family:var(--font-d);font-weight:700;font-size:17px;letter-spacing:.5px;
+  display:flex;align-items:baseline;gap:8px;
+}
+.brand-name .zh{color:var(--text)}
+.brand-name .en{color:var(--egg);font-size:12px;font-weight:600;letter-spacing:2.5px}
+.topbar-stats{margin-left:auto;display:flex;gap:18px;font-size:12.5px;color:var(--muted)}
+.topbar-stats b{color:var(--egg);font-family:var(--font-d);font-size:15px;margin-right:3px}
+
+/* ---------- Hero ---------- */
+.hero{max-width:1240px;margin:0 auto;padding:70px 22px 34px;position:relative}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--font-d);font-size:12px;letter-spacing:3px;color:var(--egg);
+  border:1px solid var(--egg-line);border-radius:999px;padding:7px 14px;margin-bottom:22px;
+}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--egg);box-shadow:0 0 0 4px rgba(246,194,27,.18)}
+.hero h1{
+  font-family:var(--font-d);
+  font-size:clamp(40px,7vw,74px);
+  font-weight:700;line-height:1.04;letter-spacing:1px;
+  margin-bottom:16px;
+}
+.hero h1 .hl{
+  color:var(--egg);
+  position:relative;
+}
+.hero h1 .hl::after{
+  content:"";position:absolute;left:0;right:0;bottom:2px;height:9px;
+  background:var(--egg-soft);z-index:-1;border-radius:3px;
+}
+.hero-sub{
+  max-width:640px;color:var(--muted);font-size:16px;margin-bottom:34px;
+}
+.hero-sub b{color:var(--text);font-weight:600}
+
+/* 统计带 */
+.stat-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:30px}
+.stat{
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:16px 22px;min-width:150px;flex:1 1 150px;
+  position:relative;overflow:hidden;
+}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--egg)}
+.stat .num{font-family:var(--font-d);font-weight:700;font-size:32px;color:var(--egg);line-height:1}
+.stat .lbl{font-size:12.5px;color:var(--muted);margin-top:7px}
+
+/* ---------- 控制条 ---------- */
+.controls{
+  position:sticky;top:63px;z-index:40;
+  background:rgba(10,19,34,.85);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+}
+.controls-inner{
+  max-width:1240px;margin:0 auto;padding:12px 22px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+}
+.searchbox{
+  position:relative;flex:1 1 220px;min-width:180px;
+}
+.searchbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.searchbox input{
+  width:100%;padding:10px 12px 10px 38px;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font-size:13.5px;font-family:var(--font-b);
+}
+.searchbox input:focus{outline:none;border-color:var(--egg-line);box-shadow:0 0 0 3px var(--egg-soft)}
+.searchbox input::placeholder{color:var(--faint)}
+select{
+  padding:10px 30px 10px 12px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;color:var(--text);font-size:13px;font-family:var(--font-b);
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23F6C21B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;
+}
+select:focus{outline:none;border-color:var(--egg-line);box-shadow:0 0 0 3px var(--egg-soft)}
+.result-count{
+  font-size:12.5px;color:var(--muted);margin-left:auto;white-space:nowrap;
+}
+.result-count b{color:var(--egg);font-family:var(--font-d);font-size:15px}
+.import-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;
+  background:var(--egg);color:#161005;transition:filter .15s ease;
+}
+.import-btn:hover{filter:brightness(1.08)}
+.import-btn svg{display:block}
+.logout-btn{
+  padding:8px 14px;border:1px solid var(--line);border-radius:9px;font-size:12.5px;color:var(--muted);
+  display:inline-flex;align-items:center;gap:6px;transition:all .15s ease;
+}
+.logout-btn:hover{color:var(--egg);border-color:var(--egg-line)}
+.logout-btn svg{display:block}
+.reset-btn{
+  padding:10px 16px;border:1px solid var(--line);border-radius:10px;
+  color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:7px;
+}
+.reset-btn:hover{color:var(--egg);border-color:var(--egg-line)}
+.reset-btn:disabled{opacity:.4;cursor:default}
+.active-tags{max-width:1240px;margin:0 auto;padding:0 22px 12px;display:flex;flex-wrap:wrap;gap:8px}
+.tag-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  border:1px solid var(--egg-line);background:var(--egg-soft);color:var(--egg);
+  border-radius:999px;padding:5px 12px;font-size:12.5px;
+}
+.tag-pill button{color:inherit;font-size:14px;line-height:1;display:grid;place-items:center}
+
+/* ---------- 卡片网格 ---------- */
+.gallery-wrap{max-width:1240px;margin:0 auto;padding:26px 22px 60px}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;
+}
+.card{
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:16px 16px 14px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:10px;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-3px);border-color:var(--egg-line);box-shadow:var(--shadow)}
+.card.special{border-color:rgba(240,169,46,.5)}
+.card.special::after{
+  content:"SPECIAL";position:absolute;right:-34px;top:12px;transform:rotate(38deg);
+  font-family:var(--font-d);font-size:9.5px;letter-spacing:2px;color:rgba(240,169,46,.5);
+  border:1px solid rgba(240,169,46,.35);padding:2px 34px;background:rgba(240,169,46,.06);
+}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.diff-badge{
+  font-size:12px;font-weight:600;border-radius:7px;padding:4px 10px;
+  display:inline-flex;align-items:center;gap:6px;flex:none;
+  color:#0B1320;white-space:nowrap;
+}
+.diff-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.d0{background:#C9E8D0;color:#1D5A32}
+.d1{background:#BFE8E2;color:#14605A}
+.d2{background:#B9DDF0;color:#12527A}
+.d3{background:#C4D2F7;color:#23418F}
+.d4{background:#D3C5F5;color:#4A2F94}
+.d5{background:#F6D3B0;color:#8A4A10}
+.d6{background:#F5BFB0;color:#8F2A14}
+.d7{background:#F2A6AE;color:#8F1420}
+.d8{background:#F5C86A;color:#6B4A05}
+
+.map-name{
+  font-family:var(--font-d);font-weight:600;font-size:20px;line-height:1.2;letter-spacing:.3px;
+}
+.map-name .map-zh{color:var(--text)}
+.map-name .map-en{display:block;font-size:10.5px;color:var(--faint);letter-spacing:2px;font-weight:500;margin-top:2px}
+.meta-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* 代码芯片（签名元素） */
+.code-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#0A1322;border:1px solid var(--egg-line);
+  border-radius:9px;padding:5px 5px 5px 12px;
+  font-family:var(--font-m);font-size:14.5px;font-weight:600;letter-spacing:1.5px;
+  color:var(--egg);
+}
+.code-chip .chip-dot{width:5px;height:5px;border-radius:50%;background:var(--egg);opacity:.7}
+.copy-btn{
+  width:27px;height:27px;border-radius:7px;display:grid;place-items:center;
+  background:var(--egg-soft);color:var(--egg);transition:all .15s ease;
+}
+.copy-btn:hover{background:var(--egg);color:#161005}
+.copy-btn.copied{background:var(--ok);color:#0B1A10}
+.copy-btn svg{display:block}
+.levels-badge{
+  font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;
+}
+.levels-badge b{color:var(--text);font-family:var(--font-d);font-size:13.5px}
+.levels-badge b.egg{color:var(--egg)}
+.author-line{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.author-line .author{color:var(--text);font-weight:600}
+.author-line .co{color:var(--faint)}
+.author-line .sep{color:var(--faint);opacity:.6}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:1px}
+.tip-chip{
+  font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:999px;padding:3px 9px;
+  transition:all .15s ease;cursor:pointer;
+}
+.tip-chip:hover{color:var(--egg);border-color:var(--egg-line);background:var(--egg-soft)}
+.card-foot{
+  margin-top:auto;padding-top:10px;border-top:1px dashed var(--line-soft);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--faint);
+}
+.best-line{display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+.best-line b{color:var(--text);font-family:var(--font-d)}
+.tut-link{
+  margin-left:auto;display:inline-flex;align-items:center;gap:6px;
+  color:var(--egg);border:1px solid var(--egg-line);border-radius:8px;
+  padding:5px 11px;font-size:12px;text-decoration:none;transition:all .15s ease;
+}
+.tut-link:hover{background:var(--egg);color:#161005}
+.tut-link svg{display:block}
+.note-line{width:100%;display:flex;gap:6px;align-items:flex-start;color:var(--faint)}
+.note-line svg{flex:none;margin-top:2px}
+
+/* 空态 */
+.empty{
+  text-align:center;padding:80px 20px;color:var(--muted);
+  border:1px dashed var(--line);border-radius:var(--radius);
+}
+.empty .big{font-family:var(--font-d);font-size:34px;color:var(--faint);margin-bottom:10px}
+.empty p{font-size:14px}
+.empty .reset{margin-top:16px;color:var(--egg);border:1px solid var(--egg-line);border-radius:8px;padding:9px 16px;font-size:13px}
+.empty .reset:hover{background:var(--egg-soft)}
+
+/* ---------- Footer ---------- */
+footer{
+  border-top:1px solid var(--line-soft);padding:34px 22px 46px;
+  background:rgba(6,11,20,.5);
+}
+.foot-inner{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;font-size:12px;color:var(--faint)}
+.foot-inner .dot-split{color:var(--line)}
+.foot-inner b{color:var(--muted);font-weight:600}
+.foot-inner a{color:var(--egg);text-decoration:none}
+.foot-inner a:hover{text-decoration:underline}
+
+/* ---------- Toast ---------- */
+#toast{
+  position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);
+  background:var(--egg);color:#161005;font-size:13.5px;font-weight:600;
+  padding:11px 20px;border-radius:10px;box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;transition:all .25s ease;z-index:99;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- 导入 Modal ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:80;background:rgba(5,9,17,.74);
+  backdrop-filter:blur(5px);display:grid;place-items:center;padding:20px;
+}
+.modal-overlay[hidden]{display:none}
+.modal{
+  width:min(620px,100%);max-height:88vh;overflow:auto;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;
+}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line-soft)}
+.modal-head h3{font-family:var(--font-d);font-size:17px;letter-spacing:.5px;display:flex;align-items:center;gap:9px}
+.modal-head h3::before{content:"";width:13px;height:2px;background:var(--egg)}
+.modal-close{width:31px;height:31px;border-radius:8px;display:grid;place-items:center;color:var(--muted);font-size:20px;line-height:1}
+.modal-close:hover{color:var(--egg);background:var(--egg-soft)}
+.modal-body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.modal-desc{font-size:13px;color:var(--muted);line-height:1.7}
+.modal-desc b{color:var(--egg);font-weight:600}
+.import-actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:7px;justify-content:center;
+  padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;
+  background:var(--egg);color:#161005;transition:filter .15s ease;
+}
+.btn-primary:hover:not(:disabled){filter:brightness(1.08)}
+.btn-primary:disabled{opacity:.45;cursor:default}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:7px;justify-content:center;
+  padding:10px 18px;border-radius:10px;font-size:13px;
+  border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s ease;
+}
+.btn-ghost:hover{border-color:var(--egg-line);color:var(--egg)}
+.btn-ghost svg{display:block}
+.paste-box{display:flex;flex-direction:column;gap:8px}
+.paste-box textarea{
+  background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  color:var(--text);padding:11px;font-size:12.5px;font-family:var(--font-m);
+  resize:vertical;min-height:74px;
+}
+.paste-box textarea:focus{outline:none;border-color:var(--egg-line);box-shadow:0 0 0 3px var(--egg-soft)}
+.paste-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.paste-row .hint{font-size:11.5px;color:var(--faint)}
+.preview{
+  border:1px dashed var(--line);border-radius:10px;padding:12px 14px;
+  font-size:12.5px;color:var(--muted);display:none;flex-direction:column;gap:6px;
+}
+.preview.show{display:flex}
+.preview .pv-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--text)}
+.preview .pv-head b{color:var(--egg);font-family:var(--font-d);font-size:15px}
+.preview .pv-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px dashed var(--line-soft);padding-top:6px}
+.preview .pv-row .code{font-family:var(--font-m);color:var(--egg);font-size:12.5px;font-weight:600}
+.preview .pv-row .muted{color:var(--faint)}
+.preview .pv-err{color:#F28B8B}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;border-top:1px solid var(--line-soft)}
+.modal-foot .grow{margin-right:auto}
+.admin-set{border-top:1px dashed var(--line-soft);padding-top:12px;display:flex;flex-direction:column;gap:9px}
+.admin-set .set-row{display:flex;gap:8px;flex-wrap:wrap}
+.admin-set input{
+  flex:1 1 120px;padding:9px 11px;background:var(--bg);border:1px solid var(--line);border-radius:9px;
+  color:var(--text);font-size:13px;font-family:var(--font-m);
+}
+.admin-set input:focus{outline:none;border-color:var(--egg-line);box-shadow:0 0 0 3px var(--egg-soft)}
+.set-msg{font-size:12px;color:var(--ok);min-height:15px}
+.set-msg.err{color:#F28B8B}
+
+/* ---------- 管理员锁屏 ---------- */
+.lock-screen{
+  position:fixed;inset:0;z-index:100;
+  background:
+    radial-gradient(900px 500px at 50% -10%, rgba(246,194,27,.12), transparent 55%),
+    radial-gradient(700px 420px at 90% 100%, rgba(50,90,170,.14), transparent 55%),
+    var(--bg);
+  display:grid;place-items:center;padding:22px;
+}
+.lock-screen[hidden]{display:none}
+.lock-card{
+  width:min(390px,100%);text-align:center;
+  background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+  padding:34px 28px 26px;
+}
+.lock-logo{
+  width:64px;height:64px;margin:0 auto 16px;display:grid;place-items:center;
+  border:1.5px solid var(--egg);border-radius:18px;transform:rotate(45deg);
+}
+.lock-logo svg{transform:rotate(-45deg);display:block}
+.lock-card h1{font-family:var(--font-d);font-size:26px;letter-spacing:1px;color:var(--text)}
+.lock-sub{font-family:var(--font-d);font-size:11px;letter-spacing:3px;color:var(--egg);margin-top:5px}
+.lock-desc{font-size:13px;color:var(--muted);margin:18px 0 14px;line-height:1.7}
+.lock-input-row{display:flex;gap:8px}
+.lock-input-row input{
+  flex:1;min-width:0;padding:11px 13px;background:var(--bg);border:1px solid var(--line);border-radius:10px;
+  color:var(--text);font-size:14px;
+}
+.lock-input-row input:focus{outline:none;border-color:var(--egg-line);box-shadow:0 0 0 3px var(--egg-soft)}
+.lock-input-row button{
+  padding:11px 20px;border-radius:10px;background:var(--egg);color:#161005;font-weight:600;font-size:14px;
+}
+.lock-input-row button:hover{filter:brightness(1.08)}
+.lock-err{color:#F28B8B;font-size:12.5px;margin-top:10px;min-height:16px}
+.lock-hint{font-size:11px;color:var(--faint);margin-top:14px;line-height:1.6}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:760px){
+  .hero{padding-top:44px}
+  .topbar-stats{display:none}
+  .controls{top:0}
+  .brand-name .en{display:none}
+  .card{margin:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="bg-grid" aria-hidden="true"></div>
+
+<!-- ============ 管理员锁屏（未登录时覆盖） ============ -->
+<div class="lock-screen" id="lock-screen" hidden>
+  <div class="lock-card" role="dialog" aria-label="管理员登录">
+    <div class="lock-logo" aria-hidden="true">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8" fill="#F6C21B"/>
+        <circle cx="9.2" cy="9.4" r="1.3" fill="#0A1322"/>
+        <circle cx="14.8" cy="9.4" r="1.3" fill="#0A1322"/>
+        <path d="M10.4 13.8c.9.8 2.3.8 3.2 0" stroke="#0A1322" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>仓跑巴士</h1>
+    <div class="lock-sub">HAMSTER&nbsp;PARKOUR&nbsp;·&nbsp;ADMIN</div>
+    <p class="lock-desc">此站点的地图数据仅对管理员开放，请输入访问密码解锁。</p>
+    <div class="lock-input-row">
+      <input type="password" id="lock-pw" placeholder="管理员密码" autocomplete="off">
+      <button id="lock-btn">解锁</button>
+    </div>
+    <div class="lock-err" id="lock-err"></div>
+    <div class="lock-hint" id="lock-hint"></div>
+  </div>
+</div>
+
+<!-- ============ 顶栏 ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8" fill="#F6C21B"/>
+        <circle cx="9.2" cy="9.4" r="1.3" fill="#0A1322"/>
+        <circle cx="14.8" cy="9.4" r="1.3" fill="#0A1322"/>
+        <path d="M10.4 13.8c.9.8 2.3.8 3.2 0" stroke="#0A1322" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="brand-name">
+      <span class="zh">仓跑巴士</span>
+      <span class="en">HAMSTER&nbsp;PARKOUR&nbsp;INDEX</span>
+    </div>
+    <div class="topbar-stats">
+      <span><b id="st-cards">209</b>条地图代码</span>
+      <span><b id="st-authors">72</b>位作者</span>
+      <span><b id="st-maps">44</b>张地图</span>
+    </div>
+    <button class="logout-btn" id="logout-btn" hidden title="退出管理员登录">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M15 12H3m0 0l4-4m-4 4l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 4h11a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      退出
+    </button>
+  </div>
+</header>
+
+<!-- ============ Hero ============ -->
+<section class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span>OVERWATCH · WRECKING BALL CUSTOM GAMES</div>
+  <h1>仓跑巴士<br><span class="hl">仓鼠跑酷地图</span></h1>
+  <p class="hero-sub">
+    《守望先锋》自定义房间「破坏球（仓鼠）」跑酷地图社区合集。每张地图都有独立的<strong>工坊代码</strong>，
+    复制代码进入游戏即可游玩。按<strong>难度</strong>、<strong>地图</strong>、<strong>作者</strong>与<strong>技巧标签</strong>筛选，
+    找到属于你的那一条跑道。
+  </p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="num" id="st1">209</div><div class="lbl">条地图代码</div></div>
+    <div class="stat"><div class="num" id="st2">72</div><div class="lbl">位创作者</div></div>
+    <div class="stat"><div class="num" id="st3">44</div><div class="lbl">张不同的守望地图</div></div>
+    <div class="stat"><div class="num" id="st4">11051</div><div class="lbl">累计关卡数</div></div>
+  </div>
+</section>
+
+<!-- ============ 控制条 ============ -->
+<section class="controls">
+  <div class="controls-inner">
+    <div class="searchbox">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="search" type="text" placeholder="搜索地图 / 作者 / 代码 / 技巧…" autocomplete="off">
+    </div>
+    <select id="f-diff" aria-label="按难度筛选"></select>
+    <select id="f-map" aria-label="按地图筛选"></select>
+    <select id="f-author" aria-label="按作者筛选"></select>
+    <select id="f-sort" aria-label="排序">
+      <option value="default">默认顺序</option>
+      <option value="levels-desc">关卡数 · 多到少</option>
+      <option value="levels-asc">关卡数 · 少到多</option>
+      <option value="map">按地图名</option>
+    </select>
+    <span class="result-count">共 <b id="count">0</b> 条代码</span>
+    <button class="import-btn" id="open-import" title="导入地图数据">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      导入数据
+    </button>
+    <button class="reset-btn" id="reset" disabled>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 3v5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      重置
+    </button>
+  </div>
+  <div class="active-tags" id="active-tags"></div>
+</section>
+
+<!-- ============ 卡片网格 ============ -->
+<main class="gallery-wrap">
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <span>数据来源：社区《新仓鼠跑酷》地图合集表，共 <b id="f-cards">209</b> 条地图代码。</span>
+    <span>本页面为玩家社区整理的非官方资料 · 难度与标签为社区习惯叫法</span>
+  </div>
+</footer>
+
+<div id="toast" role="status"></div>
+
+<!-- ============ 导入面板 ============ -->
+<div class="modal-overlay" id="import-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-label="导入地图数据">
+    <div class="modal-head">
+      <h3>导入地图数据</h3>
+      <button class="modal-close" data-close aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">
+        先<b>下载模板</b>填写，再上传填好的文件；也可直接上传已有的表格（.xlsx / .csv / .json）或粘贴文本。
+        导入后按「地图代码」去重，并<b>替换</b>当前列表。
+      </p>
+      <div class="import-actions">
+        <button class="btn-primary" id="dl-template">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          下载模板（CSV）
+        </button>
+        <label class="btn-ghost" for="import-file">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 15V3m0 0L8 7m4-4l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          选择文件
+        </label>
+        <input type="file" id="import-file" accept=".xlsx,.csv,.json,.txt" hidden>
+        <button class="btn-ghost" id="btn-restore">恢复内置数据</button>
+      </div>
+      <div class="paste-box">
+        <textarea id="paste-input" placeholder="或直接在此粘贴 CSV / JSON 数据，然后点「解析」…" spellcheck="false"></textarea>
+        <div class="paste-row">
+          <button class="btn-ghost" id="btn-parse">解析</button>
+          <span class="hint">CSV 首行应为表头：作者,地图代码,地图,难度,地图标签,关卡数量,共创作者,最快时间,最快选手,教程链接,备注</span>
+        </div>
+      </div>
+      <div class="preview" id="import-preview"></div>
+      <div class="admin-set">
+        <button class="btn-ghost" id="btn-open-set" style="align-self:flex-start">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg>
+          修改管理员密码
+        </button>
+        <div id="set-box" hidden>
+          <div class="set-row">
+            <input type="password" id="set-old" placeholder="当前密码" autocomplete="off">
+            <input type="password" id="set-new" placeholder="新密码（至少 4 位）" autocomplete="off">
+          </div>
+          <div class="set-row">
+            <button class="btn-primary" id="btn-save-pw">保存新密码</button>
+            <span class="set-msg" id="set-msg"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost grow" id="btn-restore2">恢复内置数据</button>
+      <button class="btn-ghost" data-close>取消</button>
+      <button class="btn-primary" id="btn-apply" disabled>确认导入</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= 数据 ================= */
+const RAW = [{"author":"exit","code":"Z4DBC","collection_code":"","map":"监测站·直布罗陀","difficulty":"简单—进阶","tags":"文字教学,视频教程,机器人教学,双蹭,超级跳","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"【仓鼠跑酷（直布罗陀版）】https://www.bilibili.com/video/BV1xfjizqEs7?vd_source=274aa4207884ba011b350156c10021bc","note":"","tutorial_url":"https://www.bilibili.com/video/BV1xfjizqEs7?vd_source=274aa4207884ba011b350156c10021bc","tutorial_title":"仓鼠跑酷（直布罗陀版）","merged":false},{"author":"exit","code":"947NE","collection_code":"","map":"艾兴瓦尔德","difficulty":"进阶-困难","tags":"滚房顶,禁止跳关,溜边,超级跳,双蹭,留偷步","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"exit","code":"1FN5F","collection_code":"","map":"伊里奥斯","difficulty":"进阶-困难","tags":"双蹭,偷步蹭,系统跳,留偷步,文字教学,机器人教学,视频教程,弹,滑,多蹭,挤","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"exit","code":"38SFH","collection_code":"","map":"监测站·直布罗陀","difficulty":"进阶","tags":"隐身,双蹭,超级跳","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"球球大王一动不动 名下同样收录此代码","tutorial_url":"","tutorial_title":"","merged":true},{"author":"极夜","code":"FGT0Z","collection_code":"","map":"阿努比斯神殿","difficulty":"困难-坐牢","tags":"双蹭,多蹭,偷步蹭,文字教学,视频教程,磕,滑,弹,挤","levels":"150","co_authors":"虾仁、听风、龙骑士、柠檬、万物归一者、青绿、冰泽、阿年年","best_time":"","best_player":"","tutorial":"https://www.bilibili.com/video/BV1rxQfBcEhN","note":"","tutorial_url":"https://www.bilibili.com/video/BV1rxQfBcEhN","tutorial_title":"","merged":false},{"author":"极夜","code":"W8BAJ","collection_code":"","map":"监测站·直布罗陀","difficulty":"进阶","tags":"威能,双蹭,滑,弹,磕,偷步蹭,留偷步","levels":"48","co_authors":"柠檬","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"J1DJ2","collection_code":"","map":"伊里奥斯","difficulty":"简单—进阶","tags":"滑,偷步蹭,留偷步","levels":"50","co_authors":"柠檬","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"HCNA6","collection_code":"","map":"南极半岛","difficulty":"简单","tags":"","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"CWFVG","collection_code":"","map":"尼泊尔","difficulty":"简单","tags":"","levels":"35","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"9CACS","collection_code":"","map":"阿努比斯神殿","difficulty":"简单—进阶","tags":"偷步蹭,双蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"ZKPGJ","collection_code":"","map":"训练场","difficulty":"进阶","tags":"威能,双蹭,偷步蹭,弹,超级跳","levels":"55","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"VB7N9","collection_code":"","map":"巴黎","difficulty":"进阶-困难","tags":"双蹭,偷步蹭,滚房顶,超级跳,留偷步,滑,系统跳","levels":"50","co_authors":"柠檬、夜猫","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"10ZQP","collection_code":"","map":"墓园","difficulty":"进阶-困难","tags":"双蹭,偷步蹭,系统跳","levels":"35","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"PS1QM","collection_code":"","map":"艾兴瓦尔德","difficulty":"进阶-困难","tags":"威能,双蹭,多蹭,滚房顶,系统跳,溜边,超级跳","levels":"65","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"825C0","collection_code":"","map":"艾兴瓦尔德","difficulty":"进阶-困难","tags":"猫猫车,系统跳,留偷步,文字教学,视频教程","levels":"9","co_authors":"","best_time":"","best_player":"","tutorial":"https://www.bilibili.com/video/BV1xCQDB2EN8","note":"","tutorial_url":"https://www.bilibili.com/video/BV1xCQDB2EN8","tutorial_title":"","merged":false},{"author":"极夜","code":"RR9X1","collection_code":"","map":"努巴尼","difficulty":"困难-坐牢","tags":"超级跳,双蹭,偷步蹭,多蹭,磕,溜边,钻洞,反撞,挤","levels":"90","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"J2K1D","collection_code":"","map":"帕拉伊苏","difficulty":"进阶-困难","tags":"溜边,弹,偷步蹭,系统跳,超级跳,双蹭,钻洞,滑,留偷步","levels":"60","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"极夜","code":"EH1NV","collection_code":"","map":"香巴里寺院","difficulty":"困难-坐牢","tags":"超级跳,双蹭,偷步蹭,溜边,滑,系统跳,弹,钻洞,留偷步,磕,地图外,滚房顶","levels":"80","co_authors":"青绿、柠檬、exit、瑞格莱纳","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"柠檬","code":"9TWJ9","collection_code":"","map":"花村","difficulty":"困难","tags":"视频教程,机器人教学,钻洞,双蹭,滑,超级跳,偷步蹭,滚房顶,留偷步,挤,多蹭,系统跳","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"https://www.bilibili.com/video/BV1tv27BLEgL","note":"","tutorial_url":"https://www.bilibili.com/video/BV1tv27BLEgL","tutorial_title":"","merged":false},{"author":"柠檬","code":"CCX9W","collection_code":"","map":"绿洲城","difficulty":"","tags":"","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"柠檬","code":"1QQ26","collection_code":"","map":"里阿尔托","difficulty":"进阶-困难","tags":"视频教程,滑,钻洞,滚房顶,偷步蹭,弹,多蹭,双蹭","levels":"90","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"柠檬","code":"GFAMQ","collection_code":"","map":"花岗","difficulty":"","tags":"","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"柠檬","code":"3E22S","collection_code":"","map":"伊里奥斯","difficulty":"","tags":"","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"柠檬","code":"R41KE","collection_code":"","map":"艾兴瓦尔德","difficulty":"","tags":"","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"CTQ54","collection_code":"","map":"暴雪世界","difficulty":"简单—进阶","tags":"必须下压,机器人教学,超级跳,双蹭,偷步蹭","levels":"51","co_authors":"caocao、Teabush、石三見、桂木喵二一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"0MG5Q","collection_code":"","map":"监测站·直布罗陀","difficulty":"坐牢！！！","tags":"系统跳,钻洞,溜边,延长钩,超级跳,双蹭,多蹭,偷步蹭,弹,磕,滑,滚房顶,留偷步,卡头下压,挤,像素点,抓轮胎","levels":"105","co_authors":"梦里、听风、TEABUSH、虾仁、极夜、小葱、喵二、kk、夜猫、CAOCAO、小妈、岛田家族的瞄耳、冰泽","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"AAGDF","collection_code":"","map":"","difficulty":"特殊","tags":"挂机","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"XMQS5","collection_code":"","map":"","difficulty":"特殊","tags":"答题","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"KCZEG","collection_code":"","map":"釜山","difficulty":"简单—进阶","tags":"必须下压,超级跳,卡头下压","levels":"46","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"R9X35","collection_code":"","map":"好莱坞","difficulty":"困难-坐牢","tags":"双蹭,超级跳,弹,偷步蹭,电梯关,多蹭,钻洞,滑,反撞,磕","levels":"87","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"Z9CG3","collection_code":"","map":"新皇后街","difficulty":"进阶","tags":"隐身,双蹭,滑","levels":"32","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"5SPWE","collection_code":"","map":"监测站·直布罗陀","difficulty":"特殊","tags":"托比昂跑酷","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"YF0RP","collection_code":"","map":"南极半岛","difficulty":"进阶-困难","tags":"","levels":"38","co_authors":"","best_time":"495.8s","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"球球大王一动不动","code":"PT03M","collection_code":"","map":"尼泊尔","difficulty":"困难-坐牢","tags":"偷步蹭,弹,双蹭,系统跳,卡火,溜边,滚房顶","levels":"37","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"KPCFH","collection_code":"","map":"国王大道","difficulty":"简单—进阶","tags":"文字教学,双蹭,超级跳,偷步蹭","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"CBPE8","collection_code":"","map":"里阿尔托","difficulty":"简单","tags":"偷步蹭,地图外","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"6JEJ6","collection_code":"","map":"里阿尔托","difficulty":"困难","tags":"系统跳,双蹭,偷步蹭,滑","levels":"12","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"7MQV1","collection_code":"","map":"哈瓦那","difficulty":"坐牢！！！","tags":"双蹭,多蹭,滑,钻洞,偷步蹭,溜边,弹","levels":"37","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"2FRCBB","collection_code":"","map":"国王大道","difficulty":"困难-坐牢","tags":"双蹭,多蹭,弹,偷步蹭,系统跳,滑,地图外","levels":"72","co_authors":"柠檬","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"PVTG2","collection_code":"","map":"皇家赛道","difficulty":"困难-坐牢","tags":"偷步蹭,滑,地图外,多蹭,双蹭,系统跳,溜边","levels":"25","co_authors":"虾仁","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"RSJB4","collection_code":"","map":"好莱坞","difficulty":"困难","tags":"超级跳,双蹭","levels":"25","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"Y2PP2","collection_code":"","map":"佩特拉","difficulty":"困难-坐牢","tags":"钻洞,溜边,双蹭,多蹭,偷步蹭,弹,磕,滑,留偷步","levels":"25","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"CXE5Z","collection_code":"","map":"鲁纳赛彼","difficulty":"坐牢！！！","tags":"留偷步,钻洞","levels":"4","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"XZHZZ","collection_code":"","map":"多拉多","difficulty":"坐牢！！！","tags":"卡火,滚房顶","levels":"3","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"2ZCFX","collection_code":"","map":"沃斯卡亚工业区","difficulty":"坐牢！！！","tags":"禁止下压,溜边,双蹭,超级跳,偷步蹭,留偷步,多蹭,滑","levels":"24","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kkking","code":"FZ0RP","collection_code":"","map":"铁板","difficulty":"困难-坐牢","tags":"滑,双蹭,系统跳,偷步蹭,弹,磕,多蹭","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"帝拉 / 青绿的黑化之旅途","code":"JQCEQ","collection_code":"","map":"渣克镇","difficulty":"简单","tags":"机器人教学,超级跳,文字教学","levels":"66","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":true},{"author":"我不是仓鼠","code":"WWC9R","collection_code":"","map":"艾兴瓦尔德","difficulty":"进阶","tags":"滚房顶,系统跳,溜边,双蹭,偷步蹭","levels":"42","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我不是仓鼠","code":"P42RC","collection_code":"","map":"国王大道","difficulty":"进阶","tags":"留偷步,钻洞","levels":"17","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我不是仓鼠","code":"5Z76J","collection_code":"","map":"埃斯佩兰萨","difficulty":"简单—进阶","tags":"偷步蹭","levels":"3","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我不是仓鼠","code":"ZPZ7A","collection_code":"","map":"鲁纳赛彼","difficulty":"特殊","tags":"观光车","levels":"1","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我不是仓鼠","code":"09VEW","collection_code":"","map":"埃斯佩兰萨","difficulty":"困难-坐牢","tags":"留偷步,偷步蹭,钻洞,滚房顶,系统跳,超级跳","levels":"7","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"54N8X","collection_code":"","map":"香巴里寺院","difficulty":"坐牢！！！","tags":"特殊糖","levels":"2","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"Z6NSH","collection_code":"","map":"香巴里寺院","difficulty":"困难-坐牢","tags":"特殊糖,滑,偷步蹭,溜边","levels":"13","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"331RZ","collection_code":"","map":"里阿尔托","difficulty":"坐牢！！！","tags":"双蹭","levels":"150","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"7ZNB2","collection_code":"","map":"苏拉瓦萨","difficulty":"坐牢！！！","tags":"留偷步,溜边,偷步蹭,弹","levels":"3","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"R04SY","collection_code":"","map":"伊里奥斯","difficulty":"简单—进阶","tags":"偷步蹭","levels":"52","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"NHFQ7","collection_code":"","map":"帕拉伊苏","difficulty":"简单—进阶","tags":"弹,偷步蹭,系统跳,双蹭","levels":"70","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"XPZG8","collection_code":"","map":"艾兴瓦尔德","difficulty":"简单—进阶","tags":"超级跳,溜边","levels":"81","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"SWK8Z","collection_code":"","map":"好莱坞","difficulty":"进阶-困难","tags":"双蹭,系统跳,偷步蹭,滚房顶","levels":"47","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"G4PCZ","collection_code":"","map":"好莱坞","difficulty":"进阶-困难","tags":"超级跳,偷步蹭,滚房顶,系统跳","levels":"68","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"8KX02","collection_code":"","map":"哈瓦那","difficulty":"进阶-困难","tags":"滑,双蹭,偷步蹭,留偷步,溜边","levels":"72","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"BJWHZ","collection_code":"","map":"伊里奥斯","difficulty":"进阶-困难","tags":"禁止下压,偷步蹭,溜边,留偷步,双蹭,多蹭","levels":"96","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"95E3N","collection_code":"","map":"吉拉德堡","difficulty":"进阶-困难","tags":"禁止下压,双蹭,弹,偷步蹭","levels":"61","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"WHY26","collection_code":"","map":"66号公路","difficulty":"困难-坐牢","tags":"禁止下压,弹,滑,钻洞,双蹭,偷步蹭,多蹭","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"67ZXN","collection_code":"","map":"尼泊尔","difficulty":"困难-坐牢","tags":"双蹭,滑,偷步蹭,多蹭,禁止下压","levels":"35","co_authors":"kkking、球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"caocao","code":"WRB0X","collection_code":"","map":"阿努比斯神殿","difficulty":"困难-坐牢","tags":"禁止下压,双蹭,偷步蹭,多蹭,超级跳","levels":"75","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小德","code":"J5E0Q","collection_code":"","map":"尼泊尔","difficulty":"进阶-困难","tags":"双蹭,滑,偷步蹭,滚房顶,机器人教学,视频教程","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"【破坏球跑酷尼泊尔】https://www.bilibili.com/video/BV1xxBWBTEpJ?vd_source=274aa4207884ba011b350156c10021bc","note":"","tutorial_url":"https://www.bilibili.com/video/BV1xxBWBTEpJ?vd_source=274aa4207884ba011b350156c10021bc","tutorial_title":"破坏球跑酷尼泊尔","merged":false},{"author":"小德","code":"HHAQ1","collection_code":"","map":"好莱坞","difficulty":"坐牢！！！","tags":"机器人教学,多蹭,双蹭,系统跳,滑","levels":"15","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小德","code":"2K93V","collection_code":"","map":"铁板","difficulty":"简单","tags":"超级跳","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小德","code":"2FXSN","collection_code":"","map":"釜山","difficulty":"简单","tags":"动感斗球,滑","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小德","code":"TS8K8","collection_code":"","map":"中城","difficulty":"进阶","tags":"文字教学,视频教程,滑,超级跳,双蹭,多蹭,钻洞,系统跳","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小德","code":"6QZFY","collection_code":"","map":"绿洲城","difficulty":"进阶","tags":"超级跳,双蹭,多蹭,滑,滚房顶","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"SY8E5","collection_code":"","map":"马莱温多","difficulty":"简单—进阶","tags":"文字教学,双蹭,超级跳,钻洞,滑,溜边,系统跳,弹,偷步蹭,留偷步,跳板蹭","levels":"110","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"FEF0A","collection_code":"","map":"萨摩亚","difficulty":"特殊","tags":"多难度,滑,双蹭,溜边,弹,自杀,偷步蹭,多蹭","levels":"50-30-20","co_authors":"球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"EMETD","collection_code":"","map":"吉拉德堡","difficulty":"简单","tags":"弹,钻洞,偷步蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"7WTNZM","collection_code":"","map":"绿洲城","difficulty":"进阶-困难","tags":"卡火,双蹭,偷步蹭,多蹭,弹,滚房顶,留偷步,超级跳,溜边","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"93GNA","collection_code":"","map":"苏拉瓦萨","difficulty":"坐牢！！！","tags":"卡火,钻洞,溜边,超级跳,弹,磕,滑,滚房顶,留偷步,自杀,延长钩","levels":"33","co_authors":"偶不拉风、我奶常扇赵子龙、caocao、球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"WJ0RM","collection_code":"","map":"国王大道","difficulty":"简单—进阶","tags":"文字教学,机器人教学,偷步蹭,超级跳,双蹭","levels":"100","co_authors":"球球大王一动不动","best_time":"300.54s","best_player":"Teabush","tutorial":"【破坏球跑酷 国王大道 100关教学（代码WJ0RM）】https://www.bilibili.com/video/BV1h4cQzSENB?vd_source=8f1ff66dd8819108c55c5370e6ff7a62","note":"","tutorial_url":"https://www.bilibili.com/video/BV1h4cQzSENB?vd_source=8f1ff66dd8819108c55c5370e6ff7a62","tutorial_title":"破坏球跑酷 国王大道 100关教学（代码WJ0RM）","merged":false},{"author":"Teabush","code":"PH8TZ","collection_code":"","map":"阿努比斯王座","difficulty":"简单—进阶","tags":"双蹭,钻洞,滑","levels":"52","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"94JXY","collection_code":"","map":"城堡","difficulty":"进阶-困难","tags":"双蹭,多蹭,偷步蹭,超级跳,系统跳,钻洞,滚房顶,留偷步,滑","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"HH864","collection_code":"","map":"努巴尼","difficulty":"简单—进阶","tags":"偷步蹭,留偷步,双蹭,多蹭,文字教学","levels":"90","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"6T7PR","collection_code":"","map":"哈瓦那","difficulty":"简单—进阶","tags":"禁止跳关,偷步蹭,超级跳,双蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"DKFDA","collection_code":"","map":"多拉多","difficulty":"进阶","tags":"滚房顶,留偷步","levels":"3","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"9FHPN","collection_code":"","map":"暴雪世界","difficulty":"进阶","tags":"溜边,超级跳","levels":"40","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"5E4RP","collection_code":"","map":"尼泊尔","difficulty":"进阶-困难","tags":"双蹭,多蹭,系统跳,弹,滑,溜边,钻洞,偷步蹭","levels":"72","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"RXQF6","collection_code":"","map":"地平线月球基地","difficulty":"进阶","tags":"双蹭,偷步蹭,溜边,钻洞,低重力,超级跳,滑","levels":"75","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"7NX0D","collection_code":"","map":"埃斯佩兰萨","difficulty":"进阶-困难","tags":"溜边,双蹭,弹,偷步蹭,多蹭","levels":"66","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"QX3Q6","collection_code":"","map":"新皇后街","difficulty":"坐牢！！！","tags":"溜边,双蹭,多蹭,偷步蹭,弹,磕,滑,滚房顶,留偷步,钻洞,延长钩","levels":"77","co_authors":"听风与我叙你、KKking、幸子小姐","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"5ZP1N","collection_code":"","map":"国王大道","difficulty":"坐牢！！！","tags":"系统跳,钻洞,弹,磕,滑,偷步蹭,双蹭,多蹭,超级跳,滚房顶,留偷步,卡头下压","levels":"74","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"TMAQ7","collection_code":"","map":"新渣克城","difficulty":"进阶-困难","tags":"特殊糖,双蹭,滚房顶,滑,偷步蹭,超级跳,钻洞,溜边,弹","levels":"115","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"00BPW","collection_code":"","map":"漓江塔","difficulty":"困难-坐牢","tags":"溜边,限时关,禁止下压,超级跳,双蹭,多蹭,偷步蹭,弹,磕,滚房顶,滑,挤","levels":"50","co_authors":"球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"TMZT3","collection_code":"","map":"皇家赛道","difficulty":"进阶","tags":"超级跳,溜边,滑,偷步蹭,双蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Teabush","code":"KEYFQ","collection_code":"","map":"佩特拉","difficulty":"进阶","tags":"特殊糖,双蹭,偷步蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"九号技狮","code":"9JAA6","collection_code":"","map":"努巴尼","difficulty":"简单—进阶","tags":"弹,双蹭","levels":"62","co_authors":"","best_time":"","best_player":"","tutorial":"https://www.bilibili.com/video/BV1WBPfzKEXc","note":"","tutorial_url":"https://www.bilibili.com/video/BV1WBPfzKEXc","tutorial_title":"","merged":false},{"author":"九号技狮","code":"J1T17","collection_code":"","map":"釜山","difficulty":"简单—进阶","tags":"滑,双蹭,弹,地图外","levels":"110","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"九号技狮","code":"Y4SVP","collection_code":"","map":"萨摩亚","difficulty":"简单—进阶","tags":"文字教学,视频教程,双蹭,滑,弹,溜边,系统跳","levels":"114","co_authors":"","best_time":"","best_player":"","tutorial":"https://www.bilibili.com/video/BV1LcwSzXEY2","note":"","tutorial_url":"https://www.bilibili.com/video/BV1LcwSzXEY2","tutorial_title":"","merged":false},{"author":"九号技狮","code":"3WC6C","collection_code":"","map":"沃斯卡亚工业区","difficulty":"进阶-困难","tags":"弹,留偷步,滑,偷步蹭,溜边,钻洞,视频教程","levels":"17","co_authors":"","best_time":"","best_player":"","tutorial":"https://www.bilibili.com/video/BV12tPpzTEof","note":"","tutorial_url":"https://www.bilibili.com/video/BV12tPpzTEof","tutorial_title":"","merged":false},{"author":"九号技狮","code":"ZRH3Q","collection_code":"","map":"阿特利斯","difficulty":"进阶-困难","tags":"弹,滑,双蹭,溜边,偷步蹭","levels":"61","co_authors":"极夜","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"HHA81","collection_code":"","map":"沃斯卡亚工业区","difficulty":"简单—进阶","tags":"超级跳,双蹭,偷步蹭","levels":"60","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"V4CDR","collection_code":"","map":"墓园","difficulty":"困难-坐牢","tags":"特殊糖,双蹭,偷步蹭,滑","levels":"30","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"8YMVP","collection_code":"","map":"沃斯卡亚工业区","difficulty":"简单—进阶","tags":"特殊糖,滑,超级跳,偷步蹭","levels":"62","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"CVXZW","collection_code":"","map":"帕拉伊苏","difficulty":"简单—进阶","tags":"特殊糖,偷步蹭,双蹭,滚房顶,超级跳","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"71NY3","collection_code":"","map":"漓江塔","difficulty":"简单—进阶","tags":"特殊糖,偷步蹭,双蹭,滑","levels":"60","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"3J502","collection_code":"","map":"66号公路","difficulty":"简单—进阶","tags":"特殊糖,限时关,偷步蹭,双蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"632FH","collection_code":"","map":"埃斯佩兰萨","difficulty":"简单—进阶","tags":"特殊糖,双蹭,偷步蹭,超级跳,多蹭,滚房顶","levels":"56","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"H0ZAH","collection_code":"","map":"里阿尔托","difficulty":"进阶-困难","tags":"双蹭,偷步蹭,限时关,系统跳,超级跳,滚房顶,多蹭","levels":"70","co_authors":"球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"37VVZ","collection_code":"","map":"沃斯卡亚工业区","difficulty":"进阶-困难","tags":"双蹭,偷步蹭,系统跳,弹,溜边,超级跳,卡头下压","levels":"65","co_authors":"球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"我奶常山赵子龙","code":"TNKBY","collection_code":"","map":"鲁纳赛彼","difficulty":"进阶-困难","tags":"双蹭,偷步蹭,超级跳,溜边,钻洞","levels":"60","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"作哑","code":"E9GME","collection_code":"","map":"66号公路","difficulty":"困难-坐牢","tags":"钻洞,超级跳,多蹭","levels":"28","co_authors":"球球大王一动不动","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"作哑","code":"CT58D","collection_code":"","map":"里阿尔托","difficulty":"简单—进阶","tags":"文字教学,超级跳,双蹭","levels":"68","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"作哑","code":"AE8HF","collection_code":"","map":"中城","difficulty":"进阶-困难","tags":"系统跳,溜边,视频教程,超级跳,偷步蹭,双蹭,钻洞,多蹭,滑,弹","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"作哑","code":"W4Q29","collection_code":"","map":"皇家赛道","difficulty":"困难","tags":"多蹭,偷步蹭,地图外,溜边,磕,留偷步,滚房顶","levels":"13","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"作哑","code":"F94D3","collection_code":"","map":"花村","difficulty":"进阶-困难","tags":"钻洞,超级跳,多蹭,偷步蹭,滚房顶,滑","levels":"22","co_authors":"柠檬","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"作哑","code":"SRKWBT","collection_code":"","map":"努巴尼","difficulty":"坐牢！！！","tags":"系统跳,溜边,超级跳,多蹭,偷步蹭","levels":"84","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"RHH4J","collection_code":"","map":"苏拉瓦萨","difficulty":"简单","tags":"文字教学,超级跳","levels":"76","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"WWCDC6","collection_code":"","map":"埃斯佩兰萨","difficulty":"简单","tags":"钻洞,文字教学,超级跳,滚房顶,留偷步","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"8JHY5","collection_code":"","map":"66号公路","difficulty":"入门","tags":"文字教学","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"3AFWHH","collection_code":"","map":"新皇后街","difficulty":"简单","tags":"文字教学,超级跳","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"DHP8D","collection_code":"","map":"多拉多","difficulty":"简单—进阶","tags":"双蹭,滚房顶","levels":"54","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"YQP6B","collection_code":"","map":"斗兽场","difficulty":"简单—进阶","tags":"偷步蹭,系统跳","levels":"51","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"1N60X","collection_code":"","map":"暴雪世界","difficulty":"简单","tags":"超级跳,留偷步","levels":"80","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小许很正点","code":"S73XG","collection_code":"","map":"伊里奥斯","difficulty":"简单","tags":"文字教学,留偷步","levels":"53","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Boo","code":"3K96D","collection_code":"","map":"萨摩亚","difficulty":"简单—进阶","tags":"双蹭,滑,超级跳,偷步蹭","levels":"60","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Boo","code":"PPWCY","collection_code":"","map":"监测站·直布罗陀","difficulty":"进阶-困难","tags":"反撞,超级跳","levels":"30","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Boo","code":"M82F8","collection_code":"","map":"釜山","difficulty":"进阶-困难","tags":"双蹭,多蹭,偷步蹭,弹,滑,钻洞,超级跳,滚房顶","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Boo","code":"PQ4F3","collection_code":"","map":"监测站·直布罗陀","difficulty":"困难-坐牢","tags":"双蹭,多蹭,磕,钻洞,滑,超级跳","levels":"26","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"Boo","code":"A6CG1","collection_code":"","map":"阿特利斯","difficulty":"困难-坐牢","tags":"文字教学,滚房顶,留偷步,钻洞,偷步蹭,超级跳,双蹭,滑,弹,多蹭","levels":"80","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"常熟的朱诺","code":"05457","collection_code":"","map":"巴黎","difficulty":"进阶-困难","tags":"偷步蹭,文字教学,双蹭,超级跳,多蹭,滚房顶,钻洞,溜边","levels":"100","co_authors":"小葱","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"常熟的朱诺","code":"QXZS3","collection_code":"","map":"生态监测站南极洲","difficulty":"进阶-困难","tags":"滑,偷步蹭,超级跳,双蹭,弹,磕","levels":"67","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"常熟的朱诺","code":"FB1KP","collection_code":"","map":"里阿尔托","difficulty":"进阶-困难","tags":"系统跳,双蹭,限时关,滑,弹,钻洞,超级跳,滚房顶,偷步蹭","levels":"60","co_authors":"小葱、屁屁","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"常熟的朱诺","code":"WQE4K","collection_code":"","map":"墓园","difficulty":"坐牢！！！","tags":"滑,地图外,文字教学,解密","levels":"8","co_authors":"四月的风铃","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"常熟的朱诺","code":"ENSWV","collection_code":"","map":"墓园","difficulty":"困难-坐牢","tags":"文字教学,偷步蹭,超级跳,钻洞,滑,双蹭,弹射,多蹭,系统跳,溜边,地图外","levels":"74","co_authors":"小葱","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"常熟的朱诺","code":"EG4RQ","collection_code":"","map":"阿特利斯","difficulty":"困难-坐牢","tags":"双蹭,偷步蹭,超级跳,滑,系统跳,钻洞,反撞,地图外","levels":"103","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"默口雨","code":"VHY4E","collection_code":"","map":"帕拉伊苏","difficulty":"简单","tags":"","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"陆郁生","code":"K1Z4R","collection_code":"","map":"吉拉德堡","difficulty":"简单—进阶","tags":"双蹭","levels":"41","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"陆郁生","code":"5NB13","collection_code":"","map":"釜山","difficulty":"进阶-困难","tags":"偷步蹭,双蹭,禁止下压,钻洞,超级跳,系统跳,滚房顶","levels":"54","co_authors":"听风与我叙你、青涩小妈","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"陆郁生","code":"R0JBD","collection_code":"","map":"绿洲城","difficulty":"困难-坐牢","tags":"超级跳","levels":"30","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"青绿的黑化之旅途","code":"NM3B5","collection_code":"","map":"尼泊尔","difficulty":"困难-坐牢","tags":"摸点,双蹭,超级跳,弹,滑,偷步蹭,钻洞,系统跳","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"青绿的黑化之旅途","code":"YX6VB","collection_code":"","map":"皇家赛道","difficulty":"进阶-困难","tags":"超级跳,磕,留偷步,滑,偷步蹭,双蹭","levels":"40","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"青绿的黑化之旅途","code":"4F06X","collection_code":"","map":"苏拉瓦萨","difficulty":"进阶-困难","tags":"双蹭,超级跳,留偷步,弹,滑,滚房顶,系统跳","levels":"45","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"青绿的黑化之旅途","code":"ZE112","collection_code":"","map":"皇家赛道","difficulty":"进阶","tags":"超级跳,弹,偷步蹭,滑,双蹭","levels":"40","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"青绿的黑化之旅途","code":"GVCG8","collection_code":"","map":"艾兴瓦尔德","difficulty":"困难-坐牢","tags":"偷步蹭,双蹭,溜边,弹,留偷步,滑,系统跳,多蹭,地图外,滚房顶","levels":"82","co_authors":"柠檬、极夜","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"青绿的黑化之旅途","code":"VBZ51","collection_code":"","map":"里阿尔托","difficulty":"坐牢！！！","tags":"系统跳,偷步蹭,滑","levels":"10","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"挪麦生灵","code":"ANXE3","collection_code":"","map":"努巴尼","difficulty":"简单","tags":"偷步蹭,地图外","levels":"139","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"挪麦生灵","code":"T5ZWP","collection_code":"","map":"努巴尼","difficulty":"简单","tags":"地图外","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"能干的死灵","code":"E8AYA","collection_code":"","map":"好莱坞","difficulty":"简单—进阶","tags":"偷步蹭,超级跳,双蹭,滚房顶,系统跳","levels":"70","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"又木老师","code":"5T61N","collection_code":"","map":"渣克镇","difficulty":"进阶","tags":"超级跳,滚房顶,偷步蹭,钻洞,双蹭,卡头下压","levels":"35","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":true},{"author":"听风与我叙你","code":"11GAE","collection_code":"","map":"帕拉伊苏","difficulty":"困难-坐牢","tags":"超级跳,双蹭,偷步蹭,弹,磕,溜边,滑,系统跳,多蹭,留偷步","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"听风与我叙你","code":"J9D51","collection_code":"","map":"香巴里寺院","difficulty":"简单","tags":"超级跳,滑","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"亿枫舫","code":"1NCWK","collection_code":"","map":"里阿尔托","difficulty":"特殊","tags":"多难度,超级跳,系统跳,滑,双蹭,偷步蹭,滚房顶,钻洞,溜边","levels":"","co_authors":"kkking Teabush","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"亿枫舫","code":"GRZP5","collection_code":"","map":"监测站·直布罗陀","difficulty":"简单—进阶","tags":"双蹭,超级跳","levels":"75","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"亿枫舫","code":"JB8KGQ","collection_code":"","map":"66号公路","difficulty":"简单","tags":"竞速","levels":"15","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可怕的多可怕","code":"9MJD5","collection_code":"","map":"训练场","difficulty":"特殊","tags":"仓鼠相扑","levels":"","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可怕的多可怕","code":"AZFDY","collection_code":"","map":"地平线月球基地","difficulty":"困难-坐牢","tags":"钻洞,双蹭,超级跳,偷步蹭,滑,留偷步,抓轮胎,溜边","levels":"92","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"叱咤月海鱼鱼猫","code":"SHQ85","collection_code":"","map":"艾兴瓦尔德","difficulty":"简单—进阶","tags":"文字教学,双蹭,超级跳,钻洞","levels":"46","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"叱咤月海鱼鱼猫","code":"7DQFQ","collection_code":"","map":"香巴里寺院","difficulty":"进阶","tags":"溜边,双蹭,弹,系统跳","levels":"37","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"叱咤月海鱼鱼猫","code":"FE99H","collection_code":"","map":"好莱坞","difficulty":"进阶","tags":"滚房顶,偷步蹭,双蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"V2KA2","collection_code":"","map":"多拉多","difficulty":"简单—进阶","tags":"文字教学,机器人教学,双蹭","levels":"45","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"DTNZZ","collection_code":"","map":"中城","difficulty":"坐牢！！！","tags":"弹,滑,多蹭,系统跳,偷步蹭,留偷步","levels":"14","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"8F90Q","collection_code":"","map":"南极半岛","difficulty":"困难","tags":"双蹭,多蹭,超级跳","levels":"21","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"N52DZ","collection_code":"","map":"好莱坞","difficulty":"进阶","tags":"文字教学,双蹭,偷步蹭,系统跳","levels":"32","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"MQZC0","collection_code":"","map":"尼泊尔","difficulty":"进阶-困难","tags":"超级跳,双蹭,偷步蹭,磕,滑,滚房顶,多蹭","levels":"82","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"8Q3EG","collection_code":"","map":"中城","difficulty":"进阶-困难","tags":"系统跳,超级跳,滑,卡头下压,钻洞,磕,溜边,双蹭,多蹭,弹","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"RNAE3","collection_code":"","map":"绿洲城","difficulty":"困难-坐牢","tags":"偷步蹭,多蹭,文字教学,双蹭,溜边,弹","levels":"24","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"MBQDC","collection_code":"","map":"监测站·直布罗陀","difficulty":"困难","tags":"双蹭,多蹭,系统跳","levels":"12","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"可他总在梦里","code":"2FXFR","collection_code":"","map":"釜山","difficulty":"困难-坐牢","tags":"禁止下压,双蹭,系统跳,溜边,偷步蹭","levels":"30","co_authors":"kkking、caocao","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"迟缓的巨鹰","code":"94NDR","collection_code":"","map":"哈瓦那","difficulty":"简单—进阶","tags":"双蹭,滑,钻洞,地图外,文字教学","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"九三年的信","code":"DMDDF","collection_code":"","map":"好莱坞","difficulty":"坐牢！！！","tags":"双蹭,禁止下压,滚房顶,系统跳,超级跳,多蹭,地图外,钻洞","levels":"20","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小哈蒙蒙德","code":"C0ZN2","collection_code":"","map":"香巴里寺院","difficulty":"困难-坐牢","tags":"双蹭,偷步蹭,超级跳,弹,滑,留偷步,溜边,系统跳,多蹭","levels":"71","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"somepony","code":"K1SV9","collection_code":"","map":"伊里奥斯","difficulty":"困难-坐牢","tags":"系统跳,双蹭,多蹭,偷步蹭,留偷步,溜边,滑,滚房顶,弹","levels":"80","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"洗衣机先生","code":"AFWSQ","collection_code":"","map":"埃斯佩兰萨","difficulty":"简单—进阶","tags":"文字教学,超级跳,弹,滑,双蹭,偷步蹭,系统跳","levels":"90","co_authors":"偶不拉风","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"洗衣机先生","code":"R94ED","collection_code":"","map":"皇家赛道","difficulty":"进阶-困难","tags":"文字教学,超级跳,滑,双蹭,偷步蹭,弹,钻洞,弹射","levels":"90","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"洗衣机先生","code":"CC5SX","collection_code":"","map":"好莱坞","difficulty":"进阶-困难","tags":"钻洞,双蹭,滑,滚房顶,留偷步,系统跳,电梯关,多蹭","levels":"81","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kenneth","code":"CJ85D","collection_code":"","map":"哈瓦那","difficulty":"进阶","tags":"反撞","levels":"21","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kenneth","code":"R363D","collection_code":"","map":"皇家赛道","difficulty":"进阶","tags":"反撞","levels":"21","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"板蓝根泡面","code":"ZHF39","collection_code":"","map":"马莱温多","difficulty":"进阶-困难","tags":"文字教学,跳板蹭,系统跳,双蹭,偷步蹭,超级跳,滑","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"偶不拉风","code":"4TJRF","collection_code":"","map":"佩特拉","difficulty":"进阶","tags":"钻洞,双蹭,地图外","levels":"53","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"偶不拉风","code":"RFC8T","collection_code":"","map":"监测站·直布罗陀","difficulty":"进阶-困难","tags":"双蹭,超级跳,反撞,钻洞,偷步蹭,留偷步,弹","levels":"33","co_authors":"岛田家族的瞄耳","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"偶不拉风","code":"NPJJH","collection_code":"","map":"地平线月球基地","difficulty":"简单","tags":"","levels":"","co_authors":"洗衣机先生","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"虾仁","code":"RVDS5","collection_code":"","map":"阿努比斯王座","difficulty":"困难-坐牢","tags":"系统跳,双蹭,偷步蹭,溜边,超级跳,弹,文字教学,多蹭,滑,磕,钻洞,留偷步","levels":"100","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"虾仁","code":"01TNW","collection_code":"","map":"绿洲城","difficulty":"坐牢！！！","tags":"文字教学,偷步蹭,溜边,磕,多蹭,系统跳,弹","levels":"40","co_authors":"听风与我叙你","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"虾仁","code":"K9ZAW","collection_code":"","map":"新渣克城","difficulty":"特殊","tags":"双蹭,偷步蹭,滑,多蹭,弹,钻洞,系统跳,超级跳,地图外,解密","levels":"","co_authors":"听风与我叙你","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"虾仁","code":"RJWNW","collection_code":"","map":"香巴里寺院","difficulty":"坐牢！！！","tags":"双蹭,多蹭,滑,系统跳,地图外,弹,溜边,留偷步,磕,偷步蹭,滚房顶","levels":"80","co_authors":"听风与我叙你、柠檬、somepony","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"幸子小姐","code":"BY434","collection_code":"","map":"伊里奥斯","difficulty":"坐牢！！！","tags":"滚房顶,系统跳","levels":"4","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"幸子小姐","code":"FSBDS","collection_code":"","map":"帕拉伊苏","difficulty":"困难-坐牢","tags":"地图外,解密,双蹭,系统跳,多蹭","levels":"43","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"幸子小姐","code":"1QNSA","collection_code":"","map":"艾兴瓦尔德","difficulty":"困难-坐牢","tags":"双蹭,多蹭,溜边,系统跳","levels":"22","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"幸子小姐","code":"ETM3P","collection_code":"","map":"吉拉德堡","difficulty":"困难-坐牢","tags":"双蹭,偷步蹭,钻洞,多蹭","levels":"33","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小图卷卷","code":"T86MN","collection_code":"","map":"皇家赛道","difficulty":"进阶-困难","tags":"钻洞,溜边,偷步蹭,双蹭,超级跳","levels":"62","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小图卷卷","code":"BCBBF","collection_code":"","map":"多拉多","difficulty":"进阶-困难","tags":"偷步蹭,留偷步,双蹭,溜边,滚房顶,超级跳,系统跳,钻洞,多蹭,弹射,反撞,弹,地图外","levels":"71","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"kotone","code":"97K9D","collection_code":"","map":"皇家赛道","difficulty":"进阶","tags":"双蹭,弹,留偷步,文字教学,视频教程,滑,偷步蹭,超级跳","levels":"87","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"屁屁","code":"X81XW","collection_code":"","map":"墓园","difficulty":"进阶-困难","tags":"文字教学,双蹭,偷步蹭,溜边,钻洞,弹射","levels":"60","co_authors":"帝拉","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"小老鼠011","code":"8RTDN","collection_code":"","map":"地平线月球基地","difficulty":"简单—进阶","tags":"双蹭,滑,超级跳,偷步蹭","levels":"45","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"YANGZL","code":"CQE9C","collection_code":"","map":"好莱坞","difficulty":"简单—进阶","tags":"偷步蹭,滚房顶,超级跳,双蹭","levels":"92","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"当时只道是寻常","code":"7PH7ZR","collection_code":"","map":"里阿尔托","difficulty":"进阶","tags":"超级跳,文字教学,视频教程,留偷步","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"篱下","code":"7HNXY","collection_code":"","map":"香巴里寺院","difficulty":"进阶","tags":"溜边,双蹭,系统跳","levels":"75","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"又木老师","code":"EP04X","collection_code":"","map":"好莱坞","difficulty":"进阶","tags":"超级跳,双蹭,偷步蹭","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"CORALINE","code":"XEEFH","collection_code":"","map":"渣克镇","difficulty":"进阶","tags":"双蹭,偷步蹭,滚房顶,超级跳","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"夜猫","code":"PER3A","collection_code":"","map":"阿努比斯王座","difficulty":"困难","tags":"滑,双蹭,钻洞,溜边,超级跳,偷步蹭","levels":"43","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"老爹古董店","code":"7W24X","collection_code":"","map":"多拉多","difficulty":"困难","tags":"超级跳,偷步蹭,弹,双蹭,钻洞","levels":"34","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"瑞格莱纳","code":"PFP60","collection_code":"","map":"萨摩亚","difficulty":"困难-坐牢","tags":"文字教学,超级跳,弹,偷步蹭,溜边,双蹭,滑,系统跳,滚房顶,跳板蹭,留偷步,钻洞","levels":"60","co_authors":"柠檬","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"瑞格莱纳","code":"VX0WZ","collection_code":"","map":"新渣克城","difficulty":"困难-坐牢","tags":"滑,超级跳,双蹭,留偷步,延长钩,钻洞,偷步蹭,系统跳,多蹭,弹","levels":"70","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"川川","code":"6BETT","collection_code":"","map":"国王大道","difficulty":"进阶","tags":"超级跳","levels":"42","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"川川","code":"D3X6Q","collection_code":"","map":"哈瓦那","difficulty":"进阶-困难","tags":"超级跳,滑,偷步蹭,留偷步,钻洞,双蹭,多蹭","levels":"70","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"川川","code":"7GTWH","collection_code":"","map":"伊里奥斯","difficulty":"进阶-困难","tags":"超级跳,滑,双蹭,滚房顶","levels":"35","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"川川","code":"WN1PG","collection_code":"","map":"渣克镇","difficulty":"进阶","tags":"双蹭,超级跳,滚房顶,弹,限时关","levels":"50","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"冰泽","code":"M6VB8","collection_code":"","map":"国王大道","difficulty":"困难-坐牢","tags":"弹,偷步蹭,系统跳,摸点","levels":"7","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"冰泽","code":"7R28R","collection_code":"","map":"花村","difficulty":"坐牢！！！","tags":"","levels":"8","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false},{"author":"依罗","code":"AFV7F","collection_code":"","map":"花村","difficulty":"困难-坐牢","tags":"滑,偷步蹭,弹,钻洞,超级跳,滚房顶,留偷步,溜边,双蹭","levels":"60","co_authors":"","best_time":"","best_player":"","tutorial":"","note":"","tutorial_url":"","tutorial_title":"","merged":false}];
+const DATA = RAW.map((m,i)=>({...m, idx:i}));
+
+/* 难度顺序与映射 */
+const DIFF_ORDER = ["入门","简单","简单—进阶","进阶","进阶-困难","困难","困难-坐牢","坐牢！！！","特殊"];
+const DIFF_CLASS = { "入门":"d0","简单":"d1","简单—进阶":"d2","进阶":"d3","进阶-困难":"d4","困难":"d5","困难-坐牢":"d6","坐牢！！！":"d7","特殊":"d8" };
+/* 地图英文名（HUD 小标）——仅作视觉装饰，若未知则显示地图区缩写 */
+const MAP_EN = {
+  "监测站·直布罗陀":"GIBRALTAR","艾兴瓦尔德":"EICHENWALDE","伊里奥斯":"ILIÓS","南极半岛":"ANTARCTIC","尼泊尔":"NEPAL",
+  "漓江塔":"LIJIANG TOWER","绿洲城":"OASIS","萨摩亚":"SAMOA","釜山":"BUSAN","好莱坞":"HOLLYWOOD",
+  "中城":"MIDTOWN","努巴尼":"NUMBANI","国王大道":"KING'S ROW","暴雪世界":"BLIZZARD WORLD","帕拉伊苏":"PARAÍSO",
+  "花岗":"GRANITE","阿努比斯王座":"THRONE OF ANUBIS","埃斯佩兰萨":"ESPERANÇA","斗兽场":"COLOSSEO","新皇后街":"NEW QUEEN STREET",
+  "鲁纳赛彼":"RUNASAPI","66号公路":"ROUTE 66","哈瓦那":"HAVANA","多拉多":"DORADO","渣克镇":"JUNKERTOWN",
+  "皇家赛道":"CIRCUIT ROYAL","里阿尔托":"RIALTO","香巴里寺院":"SHAMBALI","新渣克城":"NEW JUNK CITY","苏拉瓦萨":"SURAVASA",
+  "阿特利斯":"ATLIS","花村":"HANAMURA","阿努比斯神殿":"TEMPLE OF ANUBIS","训练场":"PRACTICE RANGE","铁板":"IRON PLATE",
+  "马莱温多":"MALVENTO","巴黎":"PARIS","吉拉德堡":"CHÂTEAU GUILLARD","城堡":"CASTLE","墓园":"BLACK FOREST",
+  "地平线月球基地":"LUNAR COLONY","佩特拉":"PETRA","沃斯卡亚工业区":"VOLSKAYA","生态监测站南极洲":"ECOPOINT: ANTARCTICA",
+};
+
+/* ================= 状态 ================= */
+const state = { q:"", diff:"", map:"", author:"", tag:"", sort:"default" };
+let isActiveTagSet = false; // 由标签点击设置时，不清除搜索/其他筛选
+
+/* ================= 工具 ================= */
+const $ = id => document.getElementById(id);
+const esc = s => String(s??"").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const splitTags = t => (t||"").split(/[,，、]/).map(s=>s.trim()).filter(Boolean);
+function numLevels(x){ const m = String(x||"").match(/^\d+/); return m?parseInt(m[0],10):0; }
+
+/* ================= 初始填充 ================= */
+function fillSelect(){
+  const diffs = DIFF_ORDER.slice();
+  $("f-diff").innerHTML = '<option value="">全部难度</option>' + diffs.map(d=>`<option value="${d}">${d}</option>`).join("");
+  const maps = [...new Set(DATA.map(m=>m.map).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"zh"));
+  $("f-map").innerHTML = '<option value="">全部地图</option>' + maps.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join("");
+  const auth = [...new Set(DATA.map(m=>m.author).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"zh"));
+  $("f-author").innerHTML = '<option value="">全部作者</option>' + auth.map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join("");
+}
+
+/* ================= 过滤 ================= */
+function applyFilter(){
+  const q = state.q.trim().toLowerCase();
+  let list = DATA;
+  if(q){
+    list = list.filter(m=>{
+      const hay = [m.map,m.author,m.code,m.tags,m.note,m.co_authors,m.difficulty,m.collection_code].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  }
+  if(state.diff) list = list.filter(m=>m.difficulty===state.diff);
+  if(state.map) list = list.filter(m=>m.map===state.map);
+  if(state.author) list = list.filter(m=>m.author===state.author || (m.co_authors||"").includes(state.author));
+  if(state.tag) list = list.filter(m=>splitTags(m.tags).includes(state.tag));
+  switch(state.sort){
+    case "levels-desc": list=[...list].sort((a,b)=>numLevels(b.levels)-numLevels(a.levels)); break;
+    case "levels-asc":  list=[...list].sort((a,b)=>numLevels(a.levels)-numLevels(b.levels)); break;
+    case "map":         list=[...list].sort((a,b)=>String(a.map).localeCompare(String(b.map),"zh")); break;
+    default: break;
+  }
+  return list;
+}
+
+function render(list){
+  const grid = $("grid");
+  if(!list.length){
+    grid.innerHTML = `<div class="empty"><div class="big">NO MAPS FOUND</div><p>没有匹配的地图，换个关键词或条件试试。</p><button class="reset" onclick="doReset()">清空全部筛选</button></div>`;
+    $("count").textContent = 0;
+    return;
+  }
+  $("count").textContent = list.length;
+  grid.innerHTML = list.map(m=>cardHTML(m)).join("");
+  // bind copy
+  grid.querySelectorAll(".copy-btn").forEach(b=>b.addEventListener("click",()=>copyCode(b)));
+  // bind tag filter
+  grid.querySelectorAll(".tip-chip").forEach(c=>c.addEventListener("click",()=>{ state.tag=c.dataset.tag; syncUI(); }));
+}
+
+function cardHTML(m){
+  const dclass = DIFF_CLASS[m.difficulty]||"d0";
+  const isSpecial = m.difficulty==="特殊";
+  const tags = splitTags(m.tags);
+  const mapEn = MAP_EN[m.map] || "OVERWATCH";
+  const authParts = (m.author||"").split("/").map(s=>s.trim()).filter(Boolean);
+  const co = (m.co_authors||"").split(/[、,，]/).map(s=>s.trim()).filter(Boolean);
+  const lv = numLevels(m.levels);
+  return `
+  <article class="card${isSpecial?" special":""}" data-code="${esc(m.code)}">
+    <div class="card-top">
+      <span class="diff-badge ${dclass}">${esc(m.difficulty||"未标注")}</span>
+      <span class="code-chip" title="工坊代码 · 复制进游戏即玩">
+        <span class="chip-dot"></span><span>${esc(m.code)}</span>
+        <button class="copy-btn" data-code="${esc(m.code)}" aria-label="复制代码 ${esc(m.code)}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+      </span>
+    </div>
+    <h3 class="map-name"><span class="map-zh">${esc(m.map||"特殊玩法")}</span><span class="map-en">${mapEn}</span></h3>
+    <div class="meta-line">
+      ${m.levels?`<span class="levels-badge">关卡 <b class="${isSpecial?"egg":""}">${esc(m.levels)}</b></span>`:""}
+    </div>
+    <div class="author-line">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" stroke="currentColor" stroke-width="2"/></svg>
+      <span class="author">${esc(authParts.join(" × "))}</span>
+      ${co.length?`<span class="sep">·</span><span class="co">共创 ${esc(co.join("、"))}</span>`:""}
+    </div>
+    ${tags.length?`<div class="tags">${tags.map(t=>`<button class="tip-chip" data-tag="${esc(t)}">${esc(t)}</button>`).join("")}</div>`:""}
+    <div class="card-foot">
+      ${m.best_time?`<span class="best-line">最佳 <b>${esc(m.best_time)}</b>${m.best_player?` · ${esc(m.best_player)}`:""}</span>`:""}
+      ${m.tutorial_url?`<a class="tut-link" href="${esc(m.tutorial_url)}" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>${esc(m.tutorial_title?("教学 · "+m.tutorial_title):"教学视频")}</a>`:""}
+      ${m.note?`<span class="note-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v13H7l-3 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>${esc(m.note)}</span>`:""}
+    </div>
+  </article>`;
+}
+
+/* ================= 复制 ================= */
+function copyCode(btn){
+  const code = btn.dataset.code;
+  const done = ()=>{
+    btn.classList.add("copied");
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 6.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    showToast(`代码 ${code} 已复制`);
+    setTimeout(()=>{ btn.classList.remove("copied"); btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2"/></svg>`; }, 1500);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(done).catch(()=>fallbackCopy(code,btn,done));
+  } else fallbackCopy(code,btn,done);
+}
+function fallbackCopy(code,btn,done){
+  const ta=document.createElement("textarea"); ta.value=code;
+  ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta);
+  ta.select(); try{ document.execCommand("copy"); done(); }catch(e){ showToast("复制失败，请手动记下代码"); }
+  document.body.removeChild(ta);
+}
+function showToast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1600);
+}
+
+/* ================= 同步 UI ================= */
+function syncUI(){
+  $("search").value = state.q;
+  $("f-diff").value = state.diff;
+  $("f-map").value = state.map;
+  $("f-author").value = state.author;
+  $("f-sort").value = state.sort;
+  // active tag pill
+  const box = $("active-tags");
+  box.innerHTML = state.tag ? `<span class="tag-pill">技巧：${esc(state.tag)}<button data-clear="tag" aria-label="清除技巧筛选">×</button></span>` : "";
+  box.querySelectorAll("[data-clear]").forEach(b=>b.addEventListener("click",()=>{ state[b.dataset.clear]=""; syncUI(); }));
+  const any = !!(state.q||state.diff||state.map||state.author||state.tag||state.sort!=="default");
+  $("reset").disabled = !any;
+  render(applyFilter());
+}
+function doReset(){
+  Object.assign(state,{q:"",diff:"",map:"",author:"",tag:"",sort:"default"});
+  syncUI();
+}
+
+/* ================= 事件 ================= */
+$("search").addEventListener("input",e=>{ state.q=e.target.value; syncUI(); });
+$("f-diff").addEventListener("change",e=>{ state.diff=e.target.value; syncUI(); });
+$("f-map").addEventListener("change",e=>{ state.map=e.target.value; syncUI(); });
+$("f-author").addEventListener("change",e=>{ state.author=e.target.value; syncUI(); });
+$("f-sort").addEventListener("change",e=>{ state.sort=e.target.value; syncUI(); });
+$("reset").addEventListener("click",doReset);
+
+/* ================= 导入模块 ================= */
+const DEFAULT_DATA = DATA.map(m=>({...m}));
+
+const FIELD_ALIAS = {
+  author:["作者","作者名","author"],
+  code:["地图代码","工坊代码","代码","code"],
+  collection_code:["合集代码","collection_code"],
+  map:["地图","地图名","map"],
+  difficulty:["难度","difficulty"],
+  tags:["地图标签","标签","技巧","tags"],
+  levels:["关卡数量","关卡数","关卡","levels"],
+  co_authors:["共创作者","共创","联合创作","co_authors"],
+  best_time:["最快时间","最快时间（无bug）","best_time"],
+  best_player:["最快选手","best_player"],
+  tutorial:["教程链接","教程","视频链接","链接","tutorial"],
+  note:["备注","note"]
+};
+const IMPORT_COLS=["author","code","collection_code","map","difficulty","tags","levels","co_authors","best_time","best_player","tutorial","note"];
+
+/* --- CSV 解析 --- */
+function parseCSV(text){
+  text = String(text||"").replace(/^\uFEFF/,"").replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  const rows=[]; let row=[], cur="", inQ=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(inQ){
+      if(ch==='"' && text[i+1]==='"'){ cur+='"'; i++; }
+      else if(ch==='"'){ inQ=false; }
+      else cur+=ch;
+    } else if(ch==='"'){ inQ=true; }
+    else if(ch===','){ row.push(cur); cur=""; }
+    else if(ch==='\n'){ row.push(cur); rows.push(row); row=[]; cur=""; }
+    else cur+=ch;
+  }
+  if(cur!==""||row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(r=>r.some(c=>String(c).trim()!==""));
+}
+
+/* --- JSON 解析 --- */
+function parseJSON(text){
+  let data = JSON.parse(text);
+  if(Array.isArray(data)) return data;
+  if(data && Array.isArray(data.data)) return data.data;
+  throw new Error("JSON 应为对象数组，或包含 data 数组");
+}
+
+/* --- XLSX 解析（原生 ZIP + DecompressionStream，零外部依赖） --- */
+function readU16(dv,o){ return dv.getUint16(o,true); }
+function readU32(dv,o){ return dv.getUint32(o,true); }
+function parseZip(u8){
+  const dv=new DataView(u8.buffer,u8.byteOffset,u8.byteLength);
+  let eocd=-1;
+  for(let i=u8.length-22;i>=0;i--){ if(readU32(dv,i)===0x06054b50){ eocd=i; break; } }
+  if(eocd<0) throw new Error("不是有效的 xlsx / ZIP 文件");
+  const cdOffset=readU32(dv,eocd+16), cdCount=readU16(dv,eocd+10);
+  const entries={}; let p=cdOffset;
+  for(let i=0;i<cdCount;i++){
+    if(readU32(dv,p)!==0x02014b50) break;
+    const method=readU16(dv,p+10), compSize=readU32(dv,p+20), uncompSize=readU32(dv,p+24);
+    const nameLen=readU16(dv,p+28), extraLen=readU16(dv,p+30), commentLen=readU16(dv,p+32), localOffset=readU32(dv,p+42);
+    const name=new TextDecoder().decode(u8.subarray(p+46,p+46+nameLen));
+    entries[name]={method,compSize,uncompSize,localOffset};
+    p+=46+nameLen+extraLen+commentLen;
+  }
+  return entries;
+}
+async function inflateEntry(u8,entry){
+  const dv=new DataView(u8.buffer,u8.byteOffset,u8.byteLength);
+  const p=entry.localOffset;
+  if(readU32(dv,p)!==0x04034b50) throw new Error("ZIP 条目损坏");
+  const nameLen=readU16(dv,p+26), extraLen=readU16(dv,p+28);
+  const start=p+30+nameLen+extraLen;
+  const comp=u8.subarray(start,start+entry.compSize);
+  if(entry.method===0) return comp;
+  if(typeof DecompressionStream==="undefined") throw new Error("当前浏览器不支持直接解析 xlsx，请另存为 CSV 后导入");
+  const stream=new Blob([comp]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+function xmlText(el){
+  let out="";
+  el.childNodes.forEach(n=>{ if(n.nodeType===3) out+=n.nodeValue; else if(n.nodeType===1) out+=xmlText(n); });
+  return out;
+}
+async function parseXLSX(buffer){
+  const u8=new Uint8Array(buffer);
+  const zip=parseZip(u8);
+  const sName=Object.keys(zip).find(n=>/sheet1\.xml$/.test(n));
+  const ssName=Object.keys(zip).find(n=>/sharedStrings\.xml$/.test(n));
+  if(!sName) throw new Error("未在文件中找到工作表数据");
+  const shared=[];
+  if(ssName){
+    const buf=await inflateEntry(u8,zip[ssName]);
+    const doc=new DOMParser().parseFromString(new TextDecoder().decode(buf),"text/xml");
+    doc.getElementsByTagName("si").forEach(si=>shared.push(xmlText(si)));
+  }
+  const buf=await inflateEntry(u8,zip[sName]);
+  const doc=new DOMParser().parseFromString(new TextDecoder().decode(buf),"text/xml");
+  const rows=[];
+  doc.getElementsByTagName("row").forEach(rowEl=>{
+    const cells=[];
+    rowEl.getElementsByTagName("c").forEach(c=>{
+      const col=c.getAttribute("r")||"", colStr=col.replace(/\d+/g,"");
+      let ci=0; for(let j=0;j<colStr.length;j++) ci=ci*26+(colStr.charCodeAt(j)-64);
+      const t=c.getAttribute("t"), v=c.getElementsByTagName("v")[0], is=c.getElementsByTagName("is")[0];
+      let val="";
+      if(t==="s"&&v){ const idx=parseInt(v.textContent,10); val=shared[idx]||""; }
+      else if(is) val=xmlText(is);
+      else if(v) val=v.textContent||"";
+      cells[ci-1]=val;
+    });
+    if(cells.some(c=>c&&String(c).trim()!=="")) rows.push(cells);
+  });
+  if(!rows.length) throw new Error("工作表里没有数据");
+  return rows;
+}
+
+/* --- 字段映射与清洗 --- */
+function cleanRecords(list){
+  const out=[]; const seen=new Set();
+  list.forEach(m=>{
+    const rec={...m};
+    if(rec.author) rec.author=String(rec.author).replace(/\|/g,"").trim();
+    if(rec.tags) rec.tags=String(rec.tags).trim();
+    if(rec.levels && String(rec.levels).trim().endsWith("-")) rec.levels=String(rec.levels).trim().replace(/-+$/,"");
+    const tut=String(rec.tutorial||"");
+    rec.tutorial_url=(tut.match(/https?:\/\/[^\s【】]+/)||[])[0]||"";
+    rec.tutorial_title=(tut.match(/【(.+?)】/)||[])[1]||"";
+    const code=String(rec.code||"").trim();
+    if(!code || seen.has(code)) return;
+    seen.add(code);
+    out.push(rec);
+  });
+  return out;
+}
+function mapColumns(rows){
+  const isHeaderRow = arr => arr.some(c=>IMPORT_COLS.some(k=>FIELD_ALIAS[k].includes(String(c).trim())));
+  if(isHeaderRow(rows[0])){
+    const hdr=rows[0].map(c=>String(c).trim());
+    const map={};
+    hdr.forEach((h,i)=>{ for(const k in FIELD_ALIAS){ if(FIELD_ALIAS[k].includes(h) && !(k in map)) map[k]=i; } });
+    return cleanRecords(rows.slice(1).map(r=>{
+      const rec={};
+      for(const k in map) rec[k]=r[map[k]]||"";
+      return rec;
+    }));
+  }
+  return cleanRecords(rows.map(r=>{
+    const rec={};
+    IMPORT_COLS.forEach((k,i)=>{ rec[k]=r[i]||""; });
+    return rec;
+  }));
+}
+function prepareRecords(input){
+  if(!Array.isArray(input)||!input.length) throw new Error("数据为空");
+  if(Array.isArray(input[0])) return mapColumns(input);
+  return cleanRecords(input.map(r=>({...r})));
+}
+
+/* --- 导入流程 --- */
+let pendingImport=null;
+function openModal(){ $("import-modal").hidden=false; document.body.style.overflow="hidden"; }
+function closeModal(){ $("import-modal").hidden=true; document.body.style.overflow=""; }
+function showPreview(input, isErr){
+  const pv=$("import-preview");
+  $("btn-apply").disabled=true;
+  if(isErr){
+    pv.className="preview show";
+    pv.innerHTML=`<div class="pv-err">${esc(input.message||input)}</div>`;
+    pendingImport=null; return;
+  }
+  let recs;
+  try{ recs=prepareRecords(input); }
+  catch(err){
+    pv.className="preview show";
+    pv.innerHTML=`<div class="pv-err">${esc(err.message)}</div>`;
+    pendingImport=null; return;
+  }
+  pendingImport=recs;
+  pv.className="preview show";
+  pv.innerHTML = `
+    <div class="pv-head">解析到 <b>${recs.length}</b> 条地图数据（按代码去重）</div>
+    ${recs.slice(0,3).map(r=>`<div class="pv-row"><span class="code">${esc(r.code)}</span><span>${esc(r.map||"")}</span><span class="muted">${esc(r.author||"")}</span>${r.difficulty?`<span class="muted">· ${esc(r.difficulty)}</span>`:""}</div>`).join("")}
+    ${recs.length>3?`<div class="pv-row muted">… 共 ${recs.length} 条</div>`:""}
+  `;
+  if(recs.length) $("btn-apply").disabled=false;
+}
+function applyImport(){
+  if(!pendingImport||!pendingImport.length) return;
+  DATA.length=0;
+  pendingImport.forEach((m,i)=>DATA.push({...m, idx:i}));
+  pendingImport=null;
+  closeModal();
+  fillSelect(); updateStats(); syncUI();
+  showToast(`已导入 ${DATA.length} 条地图数据`);
+}
+function updateStats(){
+  $("st-cards").textContent=$("st1").textContent=$("f-cards").textContent=DATA.length;
+  const authors=new Set();
+  DATA.forEach(m=>{ if(m.author) authors.add(m.author); (m.co_authors||"").split(/[、,，]/).forEach(n=>{n=n.trim();if(n)authors.add(n);}); });
+  $("st-authors").textContent=$("st2").textContent=authors.size;
+  $("st-maps").textContent=$("st3").textContent=new Set(DATA.map(m=>m.map).filter(Boolean)).size;
+  $("st4").textContent=DATA.reduce((s,m)=>{const x=String(m.levels||"").match(/^\d+/);return s+(x?parseInt(x[0],10):0);},0);
+}
+function restoreDefault(){
+  DATA.length=0;
+  DEFAULT_DATA.forEach(m=>DATA.push({...m}));
+  pendingImport=null;
+  $("import-preview").className="preview"; $("import-preview").innerHTML="";
+  $("btn-apply").disabled=true;
+  $("paste-input").value="";
+  fillSelect(); updateStats(); syncUI();
+  showToast(`已恢复内置 ${DATA.length} 条地图数据`);
+}
+function downloadTemplate(){
+  const header=["作者","地图代码","地图","难度","地图标签","关卡数量","共创作者","最快时间","最快选手","教程链接","备注"];
+  const sample=["exit","Z4DBC","监测站·直布罗陀","简单—进阶","文字教学,视频教程,双蹭,超级跳","100","","","","https://www.bilibili.com/video/BV1xfjizqEs7",""];
+  const q=v=>{v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const csv=header.map(q).join(",")+"\n"+sample.map(q).join(",")+"\n";
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="仓跑巴士-导入模板.csv";
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500);
+  showToast("模板已下载，填写后导入即可");
+}
+
+/* --- 导入事件 --- */
+$("open-import").addEventListener("click",openModal);
+document.querySelectorAll("#import-modal [data-close]").forEach(b=>b.addEventListener("click",closeModal));
+$("import-modal").addEventListener("click",e=>{ if(e.target===$("import-modal")) closeModal(); });
+$("dl-template").addEventListener("click",downloadTemplate);
+$("import-file").addEventListener("change",async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const name=f.name.toLowerCase();
+  try{
+    if(name.endsWith(".xlsx")) showPreview(await parseXLSX(await f.arrayBuffer()));
+    else if(name.endsWith(".csv")||name.endsWith(".txt")) showPreview(parseCSV(await f.text()));
+    else if(name.endsWith(".json")) showPreview(parseJSON(await f.text()));
+    else throw new Error("不支持的格式，请上传 .xlsx / .csv / .json");
+  }catch(err){ showPreview(err,true); }
+  e.target.value="";
+});
+$("btn-parse").addEventListener("click",()=>{
+  const text=$("paste-input").value.trim();
+  if(!text){ showPreview(new Error("请先粘贴 CSV 或 JSON 数据"),true); return; }
+  try{
+    const t=text.trim();
+    showPreview(t.startsWith("[") ? parseJSON(t) : parseCSV(t));
+  }catch(err){ showPreview(err,true); }
+});
+$("btn-apply").addEventListener("click",applyImport);
+$("btn-restore").addEventListener("click",restoreDefault);
+$("btn-restore2").addEventListener("click",restoreDefault);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("import-modal").hidden) closeModal(); });
+
+/* ================= 管理员鉴权 ================= */
+const PW_KEY="hamster_admin_pw", AUTH_KEY="hamster_admin_auth";
+function getAdminPw(){ return localStorage.getItem(PW_KEY)||"admin2026"; }
+function isAuthed(){ return localStorage.getItem(AUTH_KEY)==="1"; }
+function refreshLockHint(){
+  $("lock-hint").textContent = localStorage.getItem(PW_KEY)
+    ? "管理员密码已自定义，请使用当前密码登录"
+    : "默认密码 admin2026，登录后可在「导入数据」面板中修改";
+}
+function setLock(locked){
+  $("lock-screen").hidden=!locked;
+  $("logout-btn").hidden=locked;
+}
+function initSite(){ fillSelect(); updateStats(); syncUI(); }
+function unlockSite(){
+  localStorage.setItem(AUTH_KEY,"1");
+  setLock(false);
+  $("lock-err").textContent="";
+  $("lock-pw").value="";
+  initSite();
+}
+function lockSite(){
+  localStorage.removeItem(AUTH_KEY);
+  setLock(true);
+  refreshLockHint();
+  $("lock-pw").focus();
+}
+$("lock-btn").addEventListener("click",()=>{
+  if($("lock-pw").value===getAdminPw()) unlockSite();
+  else $("lock-err").textContent="密码错误，请重试";
+});
+$("lock-pw").addEventListener("keydown",e=>{ if(e.key==="Enter") $("lock-btn").click(); });
+$("logout-btn").addEventListener("click",lockSite);
+/* 修改密码 */
+$("btn-open-set").addEventListener("click",()=>{ $("set-box").hidden=!$("set-box").hidden; $("set-msg").textContent=""; $("set-msg").className="set-msg"; });
+$("btn-save-pw").addEventListener("click",()=>{
+  const oldPw=$("set-old").value, nw=$("set-new").value, msg=$("set-msg");
+  if(oldPw!==getAdminPw()){ msg.textContent="当前密码不正确"; msg.className="set-msg err"; return; }
+  if(nw.length<4){ msg.textContent="新密码至少 4 位"; msg.className="set-msg err"; return; }
+  localStorage.setItem(PW_KEY,nw);
+  $("set-old").value=""; $("set-new").value="";
+  msg.textContent="密码已更新"; msg.className="set-msg";
+  showToast("管理员密码已更新");
+});
+
+/* ================= 启动 ================= */
+refreshLockHint();
+if(isAuthed()){ setLock(false); initSite(); }
+else { setLock(true); $("lock-pw").focus(); }
+</script>
+</body>
+</html>
