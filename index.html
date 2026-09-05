@@ -55,6 +55,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   mask-image:radial-gradient(80% 60% at 50% 0%, #000 30%, transparent 78%);
   opacity:.4;
 }
+/* hidden 属性统一强制隐藏（防止 display 样式覆盖） */
+[hidden]{display:none!important}
 
 /* ---------- 顶栏 ---------- */
 .topbar{
@@ -168,6 +170,18 @@ select:focus{outline:none;border-color:var(--egg-line);box-shadow:0 0 0 3px var(
 }
 .logout-btn:hover{color:var(--egg);border-color:var(--egg-line)}
 .logout-btn svg{display:block}
+.admin-btn{
+  padding:8px 14px;border:1px solid var(--line);border-radius:9px;font-size:12.5px;color:var(--muted);
+  display:inline-flex;align-items:center;gap:6px;transition:all .15s ease;
+}
+.admin-btn:hover{color:var(--egg);border-color:var(--egg-line)}
+.admin-btn svg{display:block}
+.lock-close{
+  position:absolute;top:12px;right:14px;padding:6px;color:var(--faint);border-radius:8px;
+  display:grid;place-items:center;transition:all .15s ease;
+}
+.lock-close:hover{color:var(--text);background:var(--line-soft)}
+.lock-close svg{display:block}
 .reset-btn{
   padding:10px 16px;border:1px solid var(--line);border-radius:10px;
   color:var(--muted);font-size:13px;display:inline-flex;align-items:center;gap:7px;
@@ -370,18 +384,16 @@ footer{
 .set-msg{font-size:12px;color:var(--ok);min-height:15px}
 .set-msg.err{color:#F28B8B}
 
-/* ---------- 管理员锁屏 ---------- */
+/* ---------- 管理员登录弹窗 ---------- */
 .lock-screen{
   position:fixed;inset:0;z-index:100;
-  background:
-    radial-gradient(900px 500px at 50% -10%, rgba(246,194,27,.12), transparent 55%),
-    radial-gradient(700px 420px at 90% 100%, rgba(50,90,170,.14), transparent 55%),
-    var(--bg);
+  background:rgba(5,10,18,.62);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
   display:grid;place-items:center;padding:22px;
 }
 .lock-screen[hidden]{display:none}
 .lock-card{
-  width:min(390px,100%);text-align:center;
+  width:min(390px,100%);text-align:center;position:relative;
   background:linear-gradient(180deg,var(--panel-2),var(--panel));
   border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
   padding:34px 28px 26px;
@@ -424,9 +436,12 @@ footer{
 <body>
 <div class="bg-grid" aria-hidden="true"></div>
 
-<!-- ============ 管理员锁屏（未登录时覆盖） ============ -->
+<!-- ============ 管理员登录弹窗 ============ -->
 <div class="lock-screen" id="lock-screen" hidden>
   <div class="lock-card" role="dialog" aria-label="管理员登录">
+    <button class="lock-close" id="lock-close" title="关闭" aria-label="关闭">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
     <div class="lock-logo" aria-hidden="true">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="8" fill="#F6C21B"/>
@@ -437,10 +452,10 @@ footer{
     </div>
     <h1>仓跑巴士</h1>
     <div class="lock-sub">HAMSTER&nbsp;PARKOUR&nbsp;·&nbsp;ADMIN</div>
-    <p class="lock-desc">此站点的地图数据仅对管理员开放，请输入访问密码解锁。</p>
+    <p class="lock-desc">此站点对访客开放浏览；管理员登录后可导入 / 更新地图数据。</p>
     <div class="lock-input-row">
       <input type="password" id="lock-pw" placeholder="管理员密码" autocomplete="off">
-      <button id="lock-btn">解锁</button>
+      <button id="lock-btn">登录</button>
     </div>
     <div class="lock-err" id="lock-err"></div>
     <div class="lock-hint" id="lock-hint"></div>
@@ -467,6 +482,10 @@ footer{
       <span><b id="st-authors">72</b>位作者</span>
       <span><b id="st-maps">44</b>张地图</span>
     </div>
+    <button class="admin-btn" id="admin-btn" title="管理员登录">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      管理员
+    </button>
     <button class="logout-btn" id="logout-btn" hidden title="退出管理员登录">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M15 12H3m0 0l4-4m-4 4l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 4h11a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       退出
@@ -509,7 +528,7 @@ footer{
       <option value="map">按地图名</option>
     </select>
     <span class="result-count">共 <b id="count">0</b> 条代码</span>
-    <button class="import-btn" id="open-import" title="导入地图数据">
+    <button class="import-btn" id="open-import" title="导入地图数据" hidden>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       导入数据
     </button>
@@ -1027,7 +1046,11 @@ function refreshLockHint(){
 }
 function setLock(locked){
   $("lock-screen").hidden=!locked;
-  $("logout-btn").hidden=locked;
+}
+function updateAdminUI(authed){
+  $("admin-btn").hidden=authed;
+  $("logout-btn").hidden=!authed;
+  $("open-import").hidden=!authed;
 }
 function initSite(){ fillSelect(); updateStats(); syncUI(); }
 function unlockSite(){
@@ -1035,14 +1058,24 @@ function unlockSite(){
   setLock(false);
   $("lock-err").textContent="";
   $("lock-pw").value="";
+  updateAdminUI(true);
   initSite();
+  showToast("管理员已登录");
 }
 function lockSite(){
   localStorage.removeItem(AUTH_KEY);
+  updateAdminUI(false);
+  refreshLockHint();
+}
+$("admin-btn").addEventListener("click",()=>{
+  $("lock-err").textContent="";
+  $("lock-pw").value="";
   setLock(true);
   refreshLockHint();
   $("lock-pw").focus();
-}
+});
+$("lock-close").addEventListener("click",()=>{ setLock(false); });
+$("lock-screen").addEventListener("click",e=>{ if(e.target===$("lock-screen")) setLock(false); });
 $("lock-btn").addEventListener("click",()=>{
   if($("lock-pw").value===getAdminPw()) unlockSite();
   else $("lock-err").textContent="密码错误，请重试";
@@ -1063,8 +1096,8 @@ $("btn-save-pw").addEventListener("click",()=>{
 
 /* ================= 启动 ================= */
 refreshLockHint();
-if(isAuthed()){ setLock(false); initSite(); }
-else { setLock(true); $("lock-pw").focus(); }
+updateAdminUI(isAuthed());
+initSite();
 </script>
 </body>
 </html>
